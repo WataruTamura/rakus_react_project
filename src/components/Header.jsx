@@ -1,9 +1,9 @@
 import React from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -12,6 +12,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -78,6 +80,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header = () => {
+  const history = useHistory();
+  console.log(history);
+  const handleLink = (path) => history.push(path);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -161,7 +166,7 @@ const Header = () => {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="fixed" style={{ backgroundColor: '#ffb74d' }}>
+      <AppBar position="static" color="warning">
         <Toolbar>
           <IconButton
             edge="start"
@@ -171,31 +176,36 @@ const Header = () => {
           >
             <MenuIcon />
           </IconButton>
-          <img src="./assets/img/header_logo.png" alt="" />
-          <Typography className={classes.title} variant="h6" noWrap>
-            ラクラクピザ
-          </Typography>
+          <Link to="/">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/react-teame.appspot.com/o/header_logo.png?alt=media&token=30bc3f87-aa85-47d9-b27f-38e2ff49b6c4"
+              alt=""
+              width="200px"
+            />
+          </Link>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
+            <IconButton
+              aria-label="show 17 new notifications"
+              color="inherit"
+              onClick={() => {
+                handleLink('/cartlist');
+              }}
+            >
+              <Badge badgeContent={3} color="secondary">
+                <ShoppingCartIcon />
               </Badge>
             </IconButton>
             <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              aria-label="show 4 new mails"
               color="inherit"
+              onClick={() => {
+                handleLink('/orderhistory');
+              }}
             >
-              <AccountCircle />
+              <Badge badgeContent={4} color="secondary">
+                <ImportContactsIcon />
+              </Badge>
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
@@ -211,6 +221,11 @@ const Header = () => {
           </div>
         </Toolbar>
       </AppBar>
+      <div className="log-button">
+        <button>ログイン</button>
+        &nbsp;&nbsp;&nbsp;
+        <button>ログアウト</button>
+      </div>
       {renderMobileMenu}
       {renderMenu}
     </div>

@@ -2,13 +2,38 @@ body {
   margin: 0;
 }
 
-#root {
-  padding: 100px 50px 0 50px;
-}
-
 @media (min-width: 960px) {
   .makeStyles-inputInput-7 {
     border: 1px solid #fff !important;
     border-radius: 10px !important;
   }
+}
+
+button {
+  background: none;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.log-button {
+  text-align: right;
+  padding: 20px;
+}
+
+.section {
+  margin: 0 auto;
+  max-width: 400px;
+  padding: 1rem;
+  height: auto;
+  width: calc(100% - 2rem);
+}
+.headline {
+  color: #4dd0e1;
+  font-size: 1.563rem;
+  margin: 0 auto 1rem auto;
 }
