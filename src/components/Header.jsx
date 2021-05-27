@@ -163,7 +163,7 @@ const Header = () => {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="fixed">
+      <AppBar position="fixed" style={{ backgroundColor: '#ffb74d' }}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -182,7 +182,7 @@ const Header = () => {
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search…"
+              placeholder="商品名で検索"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
