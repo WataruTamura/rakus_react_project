@@ -6,6 +6,38 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
 const OrderConfirm = () => {
+//   const [name, setName] = useState('')
+//   const [nameError, setNameError] = useState('')
+
+// const handleName = (e) => {
+//   if (!e.target.value) {
+//     setNameError('名前を入力してください')
+//   } else {
+//     setNameError()
+//   }
+
+//   return (
+//     <React.Fragment>
+//     <div>
+//       <label>name</label>
+//       <input
+//         type="text"
+//         name="name"
+//         placeholder="Enter your name"
+//         value={name}
+//         onChange={(e) => {
+//           setName(e.target.value)
+//         }}
+//         onBlur={handleName}
+//       />
+//       {nameError && <p>{nameError}</p>}
+//     </div>
+//     </React.Fragment>
+//   )}
+
+// };
+
+// const OrderConfirm = () => {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -15,25 +47,16 @@ const OrderConfirm = () => {
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="firstName"
-            name="firstName"
-            label="First name"
+            id="orderName"
+            name="orderName"
+            label="order name"
             fullWidth
             autoComplete="given-name"
-          />
+            placeholder="Enter your name"
+            />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="lastName"
-            name="lastName"
-            label="Last name"
-            fullWidth
-            autoComplete="family-name"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
+          <Grid item xs={12}>
+            <TextField
             required
             id="address1"
             name="address1"

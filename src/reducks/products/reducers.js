@@ -13,3 +13,16 @@ export const ProductsReducer = (state = initialState.products, action) => {
       return state;
   }
 };
+
+// export const cartReducer = (state = initialState.carts, action) => {
+//   switch (action.type) {
+//     case Actions.FETCH_PRODUCTS:
+//       return {
+//         ...state,
+//         list: [...action.payload],
+//       };
+    
+//     default:
+//       return state;
+//   }
+// };

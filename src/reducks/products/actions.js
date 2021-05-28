@@ -5,3 +5,11 @@ export const fetchProductsAction = (products) => {
     payload: products,
   };
 };
+
+// export const FETCH_CARTS = 'fetch_carts';
+// export const fetchCartsAction = (cartList) => {
+//   return {
+//     type: FETCH_PRODUCTS,
+//     payload: cartList,
+//   };
+// };

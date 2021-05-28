@@ -37,3 +37,7 @@ button {
   font-size: 1.563rem;
   margin: 0 auto 1rem auto;
 }
+
+a {
+  text-decoration: none;
+}

@@ -2,8 +2,9 @@ import React, {useState, useCallback} from 'react';
 import  TextInput  from "../components/UIkit/TextInput";
 import {useDispatch} from "react-redux";
 import {signUp} from "../reducks/users/operations";
-import {push} from "connected-react-router"
+// import {push} from "connected-react-router"
 import {Button} from '@material-ui/core'
+import {Link} from 'react-router-dom'
 
 const SignUp = () => {
     const dispatch = useDispatch();
@@ -96,7 +97,7 @@ const SignUp = () => {
                 <span>  </span>
                 <Button variant="contained" color="primary" onClick={clear}>クリア</Button>
                 <div className="module-spacer--small" />
-                <p onClick={() => dispatch(push('/'))}>アカウントをお持ちの方はこちら</p>
+                <Link to={'/'}>アカウントをお持ちの方はこちら</Link>
             </div>
         </div>
     );

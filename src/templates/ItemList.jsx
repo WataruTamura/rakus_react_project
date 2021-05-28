@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 import { Search } from '../components/index';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -32,6 +33,7 @@ const ItemList = () => {
   }, [dispatch]);
 
   const classes = useStyles();
+  
   return (
     <>
       <Search />
@@ -40,31 +42,36 @@ const ItemList = () => {
           ? ''
           : products.map((product) => {
               return (
-                <Card className={classes.root} key={product.id}>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      alt="Contemplative Reptile"
-                      height="200"
-                      image={product.imagePath}
-                      title="Contemplative Reptile"
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {product.name}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        <span>L:{product.Lprice.toLocaleString()}円</span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <span>M:{product.Mprice.toLocaleString()}円</span>
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
+                <Link
+                  to={{ pathname: '/itemdetail', selectedItemId: product.id }}
+                  key={product.id}
+                >
+                  <Card className={classes.root}>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        alt="Contemplative Reptile"
+                        height="200"
+                        image={product.imagePath}
+                        title="Contemplative Reptile"
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {product.name}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          <span>L:{product.Lprice.toLocaleString()}円</span>
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                          <span>M:{product.Mprice.toLocaleString()}円</span>
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Link>
               );
             })}
       </div>
