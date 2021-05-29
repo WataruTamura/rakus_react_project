@@ -1,7 +1,7 @@
 import { db } from '../../firebase/index';
-import { fetchToppingAction } from './actions';
+import { fetchToppingAction, fetchSumPriceAction } from './actions';
 
-const productsRef = db.collection('topping');
+const productsRef = db.collection('topping').orderBy('id', 'asc');
 
 export const fetchTopping = () => {
   return async (dispatch) => {
@@ -15,3 +15,15 @@ export const fetchTopping = () => {
     });
   };
 };
+
+export const fetchSumPrice = (sumPrice) => {
+  return (dispatch) => {
+    dispatch(fetchSumPriceAction(sumPrice));
+  };
+};
+
+// export const size = (value) => {
+//   return () => {
+//     value;
+//   };
+// };

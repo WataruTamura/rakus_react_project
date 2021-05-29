@@ -11,6 +11,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from 'react-router'; 
+import { useDispatch, useSelector } from 'react-redux';
+import { SignIn, signIn } from '../reducks/users/operations';
+import {Link} from 'react-router-dom'
+
 
 // function Copyright() {
 //   return (
@@ -58,65 +62,76 @@ const Login = () => {
   },[setPassword]);
 
   const classes = useStyles();
+  const dispatch = useDispatch();
   const history = useHistory();
-  const LinkToHome = path => history.push(path);
+  const handlePage = path => history.push(path);
+  const selector = useSelector(state => state)
 
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          ログイン
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={email}
-            onChange={inputEmail}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={inputPassword}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={() => 
-              {LinkToHome('/')}}
-          >
+  // const loginClicked = (email, password) => {
+  //   console.log('クリック！');
+  // }
+
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
             ログイン
-          </Button>
-        </form>
-      </div>
-    </Container>
-  );
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={email}
+              onChange={inputEmail}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={inputPassword}
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={(e) => {
+                e.preventDefault()
+                dispatch(SignIn(email, password))
+              }
+            }
+            >
+              ログイン
+            </Button>
+            </form>
+            <Link to='/signup' onClick={() => {handlePage('/signup')}}>ユーザー登録がまだの方はこちら</Link>
+        </div>
+      </Container>
+    );
+  // }
 }
 
 export default Login;

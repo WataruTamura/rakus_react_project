@@ -8,7 +8,6 @@ import { ProductsReducer } from '../products/reducers';
 import { UsersReducer } from '../users/reducers';
 import { ToppingReducer } from '../topping/reducers';
 
-//import createRootReducer from '@/reducer/index';
 import { routerMiddleware, connectRouter } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 
@@ -41,6 +40,7 @@ export default function createStore(history) {
       router: connectRouter(history),
       topping: ToppingReducer,
       users: UsersReducer,
+      // sum: SumPriceReducer,
     }),
     applyMiddleware(...middleWares)
   );

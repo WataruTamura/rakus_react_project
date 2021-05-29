@@ -10,15 +10,17 @@ const Topping = (props) => {
         {props.name}
       </InputLabel>
       <Select
-        labelId="demo-simple-select-placeholder-label-label"
-        id="demo-simple-select-placeholder-label"
+        labelId="demo-simple-select-helper-label"
+        id="demo-simple-select-helper"
         value={props.value}
         onChange={props.onChange}
-        displayEmpty
         className={props.classNameSelect}
       >
-        <MenuItem value={1}>+1倍</MenuItem>
-        <MenuItem value={2}>+2倍</MenuItem>
+        <MenuItem value="">
+          <em>&nbsp;</em>
+        </MenuItem>
+        <MenuItem value={200}>+1倍</MenuItem>
+        <MenuItem value={300}>+2倍</MenuItem>
       </Select>
     </>
   );

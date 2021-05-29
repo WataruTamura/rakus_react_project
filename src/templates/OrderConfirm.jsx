@@ -1,47 +1,71 @@
-import React from 'react';
+import React,{ useCallback, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
+import { orderError } from '../reducks/validation/operation';
+import { useDispatch } from "react-redux";
+import { OrderError } from '../reducks/validation/operation';
+import { useHistory } from 'react-router';
 
 const OrderConfirm = () => {
-//   const [name, setName] = useState('')
-//   const [nameError, setNameError] = useState('')
+const dispatch = useDispatch();
+const history = useHistory();
 
-// const handleName = (e) => {
-//   if (!e.target.value) {
-//     setNameError('名前を入力してください')
-//   } else {
-//     setNameError()
-//   }
+const [destinationUserName, setDestinationUserName] = useState("")
 
-//   return (
-//     <React.Fragment>
-//     <div>
-//       <label>name</label>
-//       <input
-//         type="text"
-//         name="name"
-//         placeholder="Enter your name"
-//         value={name}
-//         onChange={(e) => {
-//           setName(e.target.value)
-//         }}
-//         onBlur={handleName}
-//       />
-//       {nameError && <p>{nameError}</p>}
-//     </div>
-//     </React.Fragment>
-//   )}
+const [destinationEmail, setDestinationEmail] = useState("")
 
-// };
+const [destinationZipcode, setDestinationZipcode] = useState("")
 
-// const OrderConfirm = () => {
+const [destinationAddress, setDestinationAddress] = useState("")
+
+const [destinationAddress2, setDestinationAddress2] = useState("")
+
+const [destinationTel, setDestinationTel] = useState("")
+const [destinationDate, setDestinationDate] = useState("")
+
+const inputOrderUserName = useCallback((e) => {
+  setDestinationUserName(e.target.value)
+},[setDestinationUserName]);
+
+const inputOrderEmail = useCallback((e) => {
+  setDestinationEmail(e.target.value)
+},[setDestinationEmail]);
+
+const inputOrderZipcode = useCallback((e) => {
+  setDestinationZipcode(e.target.value)
+},[setDestinationZipcode]);
+
+const inputOrderAddress = useCallback((e) => {
+  setDestinationAddress(e.target.value)
+},[setDestinationAddress]);
+
+const inputOrderAddress2 = useCallback((e) => {
+  setDestinationAddress2(e.target.value)
+},[setDestinationAddress2]);
+
+const inputOrderTel = useCallback((e) => {
+  setDestinationTel(e.target.value)
+},[setDestinationTel]);
+
+const inputOrderDate = useCallback((e) => {
+  setDestinationDate(e.target.value)
+},[setDestinationDate]);
+
+
+const orderClicked =(destinationUserName,destinationEmail) => {
+  dispatch(OrderError(destinationUserName,destinationEmail))
+  // history.push('/')
+}
+
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Shipping address
+        お届け先情報入力
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
@@ -49,48 +73,22 @@ const OrderConfirm = () => {
             required
             id="orderName"
             name="orderName"
-            label="order name"
+            label="Name"
             fullWidth
             autoComplete="given-name"
             placeholder="Enter your name"
+            onChange={inputOrderUserName}
             />
         </Grid>
-          <Grid item xs={12}>
+        <Grid item xs={12} sm={6}>
             <TextField
-            required
-            id="address1"
-            name="address1"
-            label="Address line 1"
-            fullWidth
-            autoComplete="shipping address-line1"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="address2"
-            name="address2"
-            label="Address line 2"
-            fullWidth
-            autoComplete="shipping address-line2"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="city"
-            name="city"
-            label="City"
-            fullWidth
-            autoComplete="shipping address-level2"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            id="state"
-            name="state"
-            label="State/Province/Region"
-            fullWidth
-          />
+              required
+              id="mail"
+              name="mail"
+              label="Mail Address"
+              fullWidth
+              autoComplete="shipping mail"
+            />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
@@ -102,25 +100,58 @@ const OrderConfirm = () => {
             autoComplete="shipping postal-code"
           />
         </Grid>
+        <Grid item xs={12}>
+            <TextField
+            required
+            id="address1"
+            name="address1"
+            label="Address line"
+            fullWidth
+            autoComplete="shipping address-line1"
+            onChange={inputOrderAddress}
+          />
+        </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="country"
-            name="country"
-            label="Country"
+            id="address"
+            name="address"
+            label="Address"
             fullWidth
-            autoComplete="shipping country"
+            autoComplete="shipping address-level2"
+            onChange={inputOrderAddress2}
           />
         </Grid>
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox color="secondary" name="saveAddress" value="yes" />
-            }
-            label="Use this address for payment details"
+        <Grid item xs={12} sm={6}>
+          <TextField
+            required
+            id="tel"
+            name="tel"
+            label="Phone Number"
+            fullWidth
+            autoComplete="shipping phone"
           />
         </Grid>
-      </Grid>
+        <Grid item xs={12} sm={6}>
+        <TextField
+          id="datetime-local"
+          label="delivery day"
+          type="datetime-local"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          />
+        </Grid>
+        </Grid>
+        <Button
+            type="button"
+            variant="contained"
+            color="primary"
+            name="button"
+            onClick={() => orderClicked(destinationUserName,destinationEmail)}
+          >
+            送信
+          </Button>
     </React.Fragment>
   );
 };

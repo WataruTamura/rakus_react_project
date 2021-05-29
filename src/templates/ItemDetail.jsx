@@ -20,9 +20,9 @@ import FormLabel from '@material-ui/core/FormLabel';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchTopping } from '../reducks/topping/operations';
+import { fetchTopping, fetchSumPrice } from '../reducks/topping/operations';
 import { getProducts } from '../reducks/products/selectors';
-import { getTopping } from '../reducks/topping/selectors';
+import { getTopping, getSumPrice } from '../reducks/topping/selectors';
 import { Topping } from '../components/index';
 
 const useStyles = makeStyles((theme) => ({
@@ -56,25 +56,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ItemDetail = (props) => {
+const ItemDetail = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const products = getProducts(selector);
   const topping = getTopping(selector);
+  const sumPrice = getSumPrice(selector);
   const selectedId = useLocation().selectedItemId;
   const selectedItem =
     products === undefined
       ? ''
       : products.filter((product) => product.id === selectedId);
-
-  console.log(topping);
-
-  useEffect(() => {
-    dispatch(fetchTopping());
-  }, [dispatch]);
-
   const classes = useStyles();
+
+  // アコーディオン
   const [expanded, setExpanded] = useState(false);
+
+  // ラベル
+  const [value, setValue] = useState('');
+  const handleChangeLabel = (event) => {
+    setValue(event.target.value);
+  };
+
+  // 数量
+  const [num, setNum] = useState(1);
+  const handleChangeNum = (event) => {
+    setNum(event.target.value);
+  };
+
+  // トッピング
   const [onion, setOnion] = useState('');
   const [tsunamayo, setTsunamayo] = useState('');
   const [itarianTomato, setItarianTomato] = useState('');
@@ -104,18 +114,121 @@ const ItemDetail = (props) => {
   const [black, setBlack] = useState('');
   const [cheese, setItariantomato] = useState('');
 
+  useEffect(() => {
+    dispatch(fetchTopping());
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   const fuga = 0;
+  //   const sum = sumArray.forEach((sum) => (fuga += sum));
+  //   console.log(sum);
+  // });
+
+  useEffect(() => {
+    const sumPrice = [
+      Number(value) * num,
+      onion,
+      tsunamayo,
+      itarianTomato,
+      squid,
+      bulgogi,
+      anchovy,
+      shrimp,
+      corn,
+      peppers,
+      freshSliced,
+      bacon,
+      pepperoni,
+      aged,
+      special,
+      camembert,
+      freshMozzarella,
+      italianSausage,
+      garlic,
+      arabiki,
+      broccoli,
+      green,
+      parmesan,
+      pineapple,
+      jalapeno,
+      mochi,
+    ]
+      .filter((price) => price !== '')
+      .reduce((pre, cur) => pre + cur);
+    dispatch(fetchSumPrice(sumPrice));
+
+    // console.log(sumArray);
+    // console.log(sumArray.reduce((pre, cur) => pre + cur));
+
+    // const sum =
+    //   Number(value) * num +
+    //   onion +
+    //   tsunamayo +
+    //   itarianTomato +
+    //   squid +
+    //   bulgogi +
+    //   anchovy +
+    //   shrimp +
+    //   corn +
+    //   peppers +
+    //   freshSliced +
+    //   bacon +
+    //   pepperoni +
+    //   aged +
+    //   special +
+    //   camembert +
+    //   freshMozzarella +
+    //   italianSausage +
+    //   garlic +
+    //   arabiki +
+    //   broccoli +
+    //   green +
+    //   parmesan +
+    //   pineapple +
+    //   jalapeno +
+    //   mochi;
+    // console.log(sum);
+    // dispatch(sumItem(sum));
+  }, [
+    onion,
+    tsunamayo,
+    itarianTomato,
+    squid,
+    bulgogi,
+    anchovy,
+    shrimp,
+    corn,
+    peppers,
+    freshSliced,
+    bacon,
+    pepperoni,
+    aged,
+    special,
+    camembert,
+    freshMozzarella,
+    italianSausage,
+    garlic,
+    arabiki,
+    broccoli,
+    green,
+    parmesan,
+    pineapple,
+    jalapeno,
+    mochi,
+    value,
+    num,
+    dispatch,
+  ]);
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
   const handleChangeOnion = (event) => {
     setOnion(event.target.value);
   };
-
   const handleChangeTsunamayo = (event) => {
     setTsunamayo(event.target.value);
   };
-
   const handleChangeItarianTomato = (event) => {
     setItarianTomato(event.target.value);
   };
@@ -202,6 +315,7 @@ const ItemDetail = (props) => {
       ) : (
         <Card className={classes.root}>
           <CardHeader
+            className="detail-title"
             avatar={
               <Avatar aria-label="recipe" className={classes.avatar}>
                 P
@@ -221,22 +335,33 @@ const ItemDetail = (props) => {
           </CardContent>
           <CardContent>
             <FormControl component="fieldset">
+              <FormLabel component="legend" className="sum-money">
+                {console.log(sumPrice)}
+                合計金額&nbsp;
+                {sumPrice === undefined ? sumPrice : sumPrice.toLocaleString()}円
+              </FormLabel>
+            </FormControl>
+          </CardContent>
+          <CardContent>
+            <FormControl component="fieldset">
               <FormLabel component="legend">サイズ</FormLabel>
               <RadioGroup
                 row
                 aria-label="position"
                 name="position"
                 defaultValue="top"
+                value={value}
+                onChange={handleChangeLabel}
               >
                 <FormControlLabel
-                  value="Mprice"
+                  value={String(selectedItem[0].Mprice)}
                   control={<Radio color="primary" />}
-                  label={`M:${selectedItem[0].Mprice}`}
+                  label={`M: ${selectedItem[0].Mprice.toLocaleString()}円`}
                 />
                 <FormControlLabel
-                  value="Lprice"
+                  value={String(selectedItem[0].Lprice)}
                   control={<Radio color="primary" />}
-                  label={`L:${selectedItem[0].Lprice}`}
+                  label={`L: ${selectedItem[0].Lprice.toLocaleString()}円`}
                 />
               </RadioGroup>
             </FormControl>
@@ -245,6 +370,7 @@ const ItemDetail = (props) => {
             <FormLabel component="legend">数量</FormLabel>
             <FormControl variant="outlined" className={classes.formControl}>
               <NativeSelect
+                onChange={handleChangeNum}
                 defaultValue={1}
                 inputProps={{
                   name: 'name',
@@ -254,11 +380,19 @@ const ItemDetail = (props) => {
                 <option value={1}>1</option>
                 <option value={2}>2</option>
                 <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={5}>5</option>
+                <option value={6}>6</option>
+                <option value={7}>7</option>
+                <option value={8}>8</option>
+                <option value={9}>9</option>
               </NativeSelect>
             </FormControl>
           </CardContent>
-          <CardActions disableSpacing>
-            <CardContent>トッピングはこちら</CardContent>
+          <CardActions disableSpacing className="toggle">
+            <CardContent onClick={handleExpandClick}>
+              追加トッピング
+            </CardContent>
             <IconButton
               className={clsx(classes.expand, {
                 [classes.expandOpen]: expanded,

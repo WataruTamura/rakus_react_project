@@ -97,7 +97,7 @@ const SignUp = () => {
                 <span>  </span>
                 <Button variant="contained" color="primary" onClick={clear}>クリア</Button>
                 <div className="module-spacer--small" />
-                <Link to={'/'}>アカウントをお持ちの方はこちら</Link>
+                <Link to={'/login'}>アカウントをお持ちの方はこちら</Link>
             </div>
         </div>
     );

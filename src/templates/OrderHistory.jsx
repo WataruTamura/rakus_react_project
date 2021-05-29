@@ -21,6 +21,8 @@ import { fetchOrders } from "../reducks/users/operations";
 import { getOrders } from "../reducks/users/selector";
 import { fetchProducts } from "../reducks/products/operations";
 import { getProducts } from "../reducks/products/selectors";
+import { fetchTopping } from "../reducks/topping/operations";
+import { getTopping } from "../reducks/topping/selectors";
 
 const useStyles = makeStyles({
   table: {
@@ -68,12 +70,16 @@ const OrderHistory = () => {
   const selector = useSelector((state) => state);
   const orders = getOrders(selector);
   const products = getProducts(selector);
+  const topping = getTopping(selector);
 
   useEffect(() => {
     dispatch(fetchOrders());
   }, [dispatch]);
   useEffect(() => {
     dispatch(fetchProducts());
+  }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchTopping());
   }, [dispatch]);
 
 
@@ -104,55 +110,85 @@ const OrderHistory = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders
-                .filter((order) => order.status !== 0)
-                .map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell>{order.orderDate}</TableCell>
-                    {order.itemInfo.map((itemInfos) => (
-                      <TableCell key={itemInfos.itemId}>
-                        {/* {itemInfos.itemNum}個 */}
-                        {products === undefined
-                          ? ""
-                          : products
-                              .filter(
-                                (product) => product.id === itemInfos.itemId
-                              )
-                              .map((product) => {
-                                return (
-                                  <div key={product.id}>{product.name}</div>
-                                );
-                              })}
-                        {/* {itemInfos.toppings.map((topping) => (
-                          <TableCell key={topping.toppingId}>
-                            {topping.filter(
-                              (toppings)=>toppings.id===topping.toppingId
-                            )}
-                          </TableCell>
-                        ))} */}
+              {orders === undefined ? (
+                <h2 align="center">注文履歴がありません</h2>
+              ) : (
+                orders
+                  .filter((order) => order.status !== 0)
+                  .map((order) => (
+                    <TableRow key={order.id}>
+                      <TableCell align="center">
+                        {order.orderDate}
+                        {order.itemInfo.map((itemInfos) => (
+                          <div key={itemInfos.itemId}>
+                            {products === undefined
+                              ? ""
+                              : products
+                                  .filter(
+                                    (product) => product.id === itemInfos.itemId
+                                  )
+                                  .map((product) => {
+                                    return (
+                                      <div key={product.id}>
+                                        <img
+                                          src={product.imagePath}
+                                          alt="アイコン"
+                                          height="100px"
+                                          align="center"
+                                        />
+                                      </div>
+                                    );
+                                  })}
+                          </div>
+                        ))}
                       </TableCell>
-                    ))}
-                    {/* {.map((itemInfos) => (
-                      <TableCell key={itemInfos.itemId}>
-                        {itemInfos.toppings.filter((topping) => topping)}
-                      </TableCell>
-                    ))} */}
-                  </TableRow>
-                ))}
-              {/* {products === undefined
-                ? ""
-                : products
-                    .filter((product) => product.id === 1)
-                    .map((product) => {
-                      return (
-                        <TableRow key={product.id}>
-                          <TableCell>{product.name}</TableCell>
-                        </TableRow>
-                      );
-                    })} */}
-              {/* <TableRow>
-                {products.filter((product) => product.id === 1)}
-              </TableRow> */}
+                      {order.itemInfo.map((itemInfos) => (
+                        <TableCell align="center" key={itemInfos.itemId}>
+                          {/* {itemInfos.itemNum}個 */}
+                          {products === undefined
+                            ? ""
+                            : products
+                                .filter(
+                                  (product) => product.id === itemInfos.itemId
+                                )
+                                .map((product) => {
+                                  return (
+                                    <div key={product.id}>{product.name}</div>
+                                  );
+                                })}
+                        </TableCell>
+                      ))}
+                      {order.itemInfo.map((itemInfos) => (
+                        <TableCell align="center" key={itemInfos.itemId}>
+                          {/* {itemInfos.itemNum}個 */}
+                          {itemInfos.toppings.map((topp) => (
+                            <div key={topp.toppingId}>
+                              {topping === undefined
+                                ? ""
+                                : topping
+                                    .filter(
+                                      (toppings) =>
+                                        toppings.id === topp.toppingId
+                                    )
+                                    .map((toppings) => {
+                                      return (
+                                        <div key={toppings.id}>
+                                          {toppings.name}
+                                        </div>
+                                      );
+                                    })}
+                            </div>
+                          ))}
+                        </TableCell>
+                      ))}
+                      {order.itemInfo.map((itemInfos) => (
+                        <TableCell key={itemInfos.itemId}>
+                          {itemInfos.itemNum}個
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+              )}
               {/* {orders.length > 0 &&
                 orders.map((order) => (
                   <TableRow order={order} key={order.id}>

@@ -1,11 +1,10 @@
 import { db } from '../../firebase/index';
-import { fetchProductsAction ,fetchCartsAction} from './actions';
-import {useSelector} from 'react-redux'
+import { fetchProductsAction} from './actions';
+// import { useSelector } from 'react-redux';
 //import { initialState } from '../store/initialState';
-import { getUserId } from '../../reducks/users/selector';
+// import { getUserId } from '../../reducks/users/selector';
 
-
-const productsRef = db.collection('pruducts');
+const productsRef = db.collection('pruducts').orderBy('id', 'asc');
 
 export const fetchProducts = () => {
   return async (dispatch) => {
@@ -19,7 +18,6 @@ export const fetchProducts = () => {
     });
   };
 };
-
 
 // const uid = initialState.users.uid
 
@@ -41,11 +39,8 @@ export const fetchProducts = () => {
 //   }
 // }
 
-
-
-
 // export const fetchCart = () => {
-  
+
 //     return async (dispatch) => {
 //       if(uid){
 //         db.collection(`users/${uid}/order`).get().then((snapshots) => {
@@ -57,12 +52,9 @@ export const fetchProducts = () => {
 //           dispatch(fetchProductsAction(cartList));
 //         });
 //       }
-      
+
 //     };
 // };
-
-
-
 
 // export const orderProducts = (productsInCart) => {
 //   return async(dispatch, getState) => {
@@ -72,4 +64,3 @@ export const fetchProducts = () => {
 
 //   }
 // }
-

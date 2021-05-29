@@ -14,8 +14,10 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
-import { useSelector } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { getUserName } from '../reducks/users/selector';
+import { LocalDiningOutlined } from '@material-ui/icons';
+import { signOut } from '../reducks/users/operations'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -87,6 +89,7 @@ const Header = () => {
 
   const selector = useSelector((state) => state);
   const username = getUserName(selector);
+  const dispatch = useDispatch();
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -235,7 +238,7 @@ const Header = () => {
           ログイン
         </button>
         &nbsp;&nbsp;&nbsp;
-        <button>ログアウト</button>
+        <button onClick={() => dispatch(signOut())}>ログアウト</button>
       </div>
       {renderMobileMenu}
       {renderMenu}

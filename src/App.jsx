@@ -4,12 +4,11 @@ import Router from './Router';
 import { auth } from './firebase/index'
 import { useSelector } from 'react-redux';
 import { getUserId } from './reducks/users/selector';
-import {useHistory} from 'react-router-dom'
+//import {useHistory} from 'react-router-dom'
 
 const App = () => {
 
-  const history = useHistory()
-  const handle = path => history.push(path)
+
 
   const selector = useSelector((state) => state);
   let uid = getUserId(selector);
@@ -21,7 +20,6 @@ const App = () => {
         console.log(user.uid)
         console.log(uid);
         console.log('ログインしました！')
-        handle('/')
       }else{
         uid = null
         console.log('ログアウトしました！')
