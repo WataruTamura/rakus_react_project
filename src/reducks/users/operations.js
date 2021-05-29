@@ -4,7 +4,7 @@ import {
   isValidEmailFormat,
   isValidRequiredInput,
 } from '../../function/common';
-import { signInAction } from './actions';
+import { signInAction ,fetchProductsInCartAction} from './actions';
 import { createBrowserHistory } from 'history';
 
 const pattern = /^[0-9]{3}-[0-9]{4}$/;
@@ -139,5 +139,23 @@ export const signOut = () => {
       })
     );
     dispatch.push('/');
+  };
+};
+
+const ordersRef = db
+  .collection("users")
+  .doc("1CiNypKuOkdRJL7KKGaV5w7QSKB3")
+  .collection("orders");
+
+export const fetchOrders = () => {
+  return async (dispatch) => {
+    ordersRef.get().then((snapshots) => {
+      const orderList = [];
+      snapshots.forEach((snapshot) => {
+        const order = snapshot.data();
+        orderList.push(order);
+      });
+      dispatch(fetchOrdersAction(orderList));
+    });
   };
 };

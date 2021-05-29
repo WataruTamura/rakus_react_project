@@ -14,12 +14,11 @@ export const ProductsReducer = (state = initialState.products, action) => {
   }
 };
 
-// export const cartReducer = (state = initialState.carts, action) => {
+// export const cartReducer = (state = initialState.users.cart, action) => {
 //   switch (action.type) {
 //     case Actions.FETCH_PRODUCTS:
 //       return {
-//         ...state,
-//         list: [...action.payload],
+//         list: action.payload,
 //       };
     
 //     default:

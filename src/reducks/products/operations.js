@@ -1,6 +1,9 @@
 import { db } from '../../firebase/index';
-import { fetchProductsAction } from './actions';
+import { fetchProductsAction ,fetchCartsAction} from './actions';
+import {useSelector} from 'react-redux'
 //import { initialState } from '../store/initialState';
+import { getUserId } from '../../reducks/users/selector';
+
 
 const productsRef = db.collection('pruducts');
 
@@ -19,6 +22,24 @@ export const fetchProducts = () => {
 
 
 // const uid = initialState.users.uid
+
+// export const FetchCart = () => {
+
+//   const selector = useSelector((state) => state);
+//   let uid = getUserId(selector);
+
+//   return async (dispatch) => {
+//     db.collection(`users/${uid}/orders`).
+//     get().
+//     then((snapshot) => {
+//       const ordersList = []
+//       snapshot.forEach((snap) => {
+//         ordersList.push(snap.data())
+//       })
+//       dispatch(fetchCartsAction(ordersList))
+//     })
+//   }
+// }
 
 
 

@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from "reselect";
 
 const usersSelector = (state) => state.users;
 
@@ -12,4 +12,9 @@ export const getUserName = createSelector(
 export const getProductsInCart = createSelector(
   [usersSelector],
   (state) => state.cart
+);
+
+export const getOrders = createSelector(
+  [usersSelector],
+  (state) => state.orders
 );
