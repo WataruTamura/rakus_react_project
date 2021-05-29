@@ -15,12 +15,17 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchTopping, fetchSumPrice } from '../reducks/topping/operations';
+import {
+  fetchTopping,
+  fetchSumPrice,
+  addOrdersInfo,
+} from '../reducks/topping/operations';
 import { getProducts } from '../reducks/products/selectors';
 import { getTopping, getSumPrice } from '../reducks/topping/selectors';
 import { Topping } from '../components/index';
@@ -29,6 +34,11 @@ const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 860,
     margin: '0 auto',
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
   },
   media: {
     height: 0,
@@ -74,8 +84,12 @@ const ItemDetail = () => {
 
   // ラベル
   const [value, setValue] = useState('');
+  const [LabelName, setLabelName] = useState('');
+  const [toppings, setToppings] = useState('');
+
   const handleChangeLabel = (event) => {
     setValue(event.target.value);
+    setLabelName(event.target.name);
   };
 
   // 数量
@@ -118,12 +132,6 @@ const ItemDetail = () => {
     dispatch(fetchTopping());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   const fuga = 0;
-  //   const sum = sumArray.forEach((sum) => (fuga += sum));
-  //   console.log(sum);
-  // });
-
   useEffect(() => {
     const sumPrice = [
       Number(value) * num,
@@ -152,43 +160,13 @@ const ItemDetail = () => {
       pineapple,
       jalapeno,
       mochi,
+      potato,
+      black,
+      cheese,
     ]
       .filter((price) => price !== '')
       .reduce((pre, cur) => pre + cur);
     dispatch(fetchSumPrice(sumPrice));
-
-    // console.log(sumArray);
-    // console.log(sumArray.reduce((pre, cur) => pre + cur));
-
-    // const sum =
-    //   Number(value) * num +
-    //   onion +
-    //   tsunamayo +
-    //   itarianTomato +
-    //   squid +
-    //   bulgogi +
-    //   anchovy +
-    //   shrimp +
-    //   corn +
-    //   peppers +
-    //   freshSliced +
-    //   bacon +
-    //   pepperoni +
-    //   aged +
-    //   special +
-    //   camembert +
-    //   freshMozzarella +
-    //   italianSausage +
-    //   garlic +
-    //   arabiki +
-    //   broccoli +
-    //   green +
-    //   parmesan +
-    //   pineapple +
-    //   jalapeno +
-    //   mochi;
-    // console.log(sum);
-    // dispatch(sumItem(sum));
   }, [
     onion,
     tsunamayo,
@@ -215,9 +193,81 @@ const ItemDetail = () => {
     pineapple,
     jalapeno,
     mochi,
+    potato,
+    black,
+    cheese,
     value,
     num,
     dispatch,
+  ]);
+
+  useEffect(() => {
+    if (topping === undefined) {
+      return;
+    } else {
+      setToppings(
+        [
+          { id: topping[0].id, toppingSize: onion },
+          { id: topping[1].id, toppingSize: tsunamayo },
+          { id: topping[2].id, toppingSize: itarianTomato },
+          { id: topping[3].id, toppingSize: squid },
+          { id: topping[4].id, toppingSize: bulgogi },
+          { id: topping[5].id, toppingSize: anchovy },
+          { id: topping[6].id, toppingSize: shrimp },
+          { id: topping[7].id, toppingSize: corn },
+          { id: topping[8].id, toppingSize: peppers },
+          { id: topping[9].id, toppingSize: freshSliced },
+          { id: topping[10].id, toppingSize: bacon },
+          { id: topping[11].id, toppingSize: pepperoni },
+          { id: topping[12].id, toppingSize: aged },
+          { id: topping[13].id, toppingSize: special },
+          { id: topping[14].id, toppingSize: camembert },
+          { id: topping[15].id, toppingSize: freshMozzarella },
+          { id: topping[16].id, toppingSize: italianSausage },
+          { id: topping[17].id, toppingSize: garlic },
+          { id: topping[18].id, toppingSize: arabiki },
+          { id: topping[19].id, toppingSize: broccoli },
+          { id: topping[20].id, toppingSize: green },
+          { id: topping[21].id, toppingSize: parmesan },
+          { id: topping[22].id, toppingSize: pineapple },
+          { id: topping[23].id, toppingSize: jalapeno },
+          { id: topping[24].id, toppingSize: mochi },
+          { id: topping[25].id, toppingSize: potato },
+          { id: topping[26].id, toppingSize: black },
+          { id: topping[27].id, toppingSize: cheese },
+        ].filter((topping) => topping.toppingSize !== '')
+      );
+    }
+  }, [
+    onion,
+    tsunamayo,
+    itarianTomato,
+    squid,
+    bulgogi,
+    anchovy,
+    shrimp,
+    corn,
+    peppers,
+    freshSliced,
+    bacon,
+    pepperoni,
+    aged,
+    special,
+    camembert,
+    freshMozzarella,
+    italianSausage,
+    garlic,
+    arabiki,
+    broccoli,
+    green,
+    parmesan,
+    pineapple,
+    jalapeno,
+    mochi,
+    potato,
+    black,
+    cheese,
+    topping,
   ]);
 
   const handleExpandClick = () => {
@@ -336,9 +386,9 @@ const ItemDetail = () => {
           <CardContent>
             <FormControl component="fieldset">
               <FormLabel component="legend" className="sum-money">
-                {console.log(sumPrice)}
                 合計金額&nbsp;
-                {sumPrice === undefined ? sumPrice : sumPrice.toLocaleString()}円
+                {sumPrice === undefined ? sumPrice : sumPrice.toLocaleString()}
+                円
               </FormLabel>
             </FormControl>
           </CardContent>
@@ -354,11 +404,13 @@ const ItemDetail = () => {
                 onChange={handleChangeLabel}
               >
                 <FormControlLabel
+                  name="0"
                   value={String(selectedItem[0].Mprice)}
                   control={<Radio color="primary" />}
                   label={`M: ${selectedItem[0].Mprice.toLocaleString()}円`}
                 />
                 <FormControlLabel
+                  name="1"
                   value={String(selectedItem[0].Lprice)}
                   control={<Radio color="primary" />}
                   label={`L: ${selectedItem[0].Lprice.toLocaleString()}円`}
@@ -644,6 +696,19 @@ const ItemDetail = () => {
               )}
             </CardContent>
           </Collapse>
+          <CardContent>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                dispatch(
+                  addOrdersInfo(selectedId, sumPrice, LabelName, toppings)
+                );
+              }}
+            >
+              カートに追加
+            </Button>
+          </CardContent>
         </Card>
       )}
     </>
@@ -651,3 +716,40 @@ const ItemDetail = () => {
 };
 
 export default ItemDetail;
+
+// const orders = [
+//   {
+//     itemInfo: [
+//       {
+//         id: 'usergrewa239f0aw（いらない？）',
+//         itemId: 1,
+//         ItemNum: 4,
+//         itemSize: 0,
+//         toppings: [
+//           { id: 'fewag（いらない？）', toppingId: 1, toppingSize: 1 },
+//           { id: 'gawegfewa', toppingId: 2, toppingSize: 2 },
+//         ],
+//       },
+//       {
+//         id: 'fgwa09g490gaw（いらない？）',
+//         itemId: 2,
+//         ItemNum: 4,
+//         itemSize: 1,
+//         toppings: [
+//           { id: 'fewag（いらない？）', toppingId: 1, toppingSize: 1 },
+//           { id: 'gawegfewa', toppingId: 2, toppingSize: 2 },
+//         ],
+//       },
+//     ],
+//     status: 1,
+//     userId: 'ewgawghra0',
+//     orderDate: '2020-20-20',
+//     destinationName: '田中',
+//   },
+//   {
+//     status: 0,
+//     userId: 'ewgawghra0',
+//     orderDate: '2020-20-22',
+//     destinationName: '田村',
+//   },
+// ];

@@ -19,8 +19,12 @@ const Topping = (props) => {
         <MenuItem value="">
           <em>&nbsp;</em>
         </MenuItem>
-        <MenuItem value={200}>+1倍</MenuItem>
-        <MenuItem value={300}>+2倍</MenuItem>
+        <MenuItem name="1" value={200}>
+          +1倍
+        </MenuItem>
+        <MenuItem name="2" value={300}>
+          +2倍
+        </MenuItem>
       </Select>
     </>
   );

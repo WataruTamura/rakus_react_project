@@ -24,42 +24,37 @@ const useStyles = makeStyles({
 });
 
 const ItemList = () => {
-  const [filterText, setFilterText] = useState('')
+  const [filterText, setFilterText] = useState('');
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const products = getProducts(selector);
-  console.log(products);
   let showProducts = [];
 
   const alertDelete = () => {
-    alert('該当する商品はありません')
-    setFilterText('')
-  }
-  
-  if (products !== undefined) {
-    showProducts = products.filter(product => {
-      if (product.name.indexOf(filterText) !== -1) {
-        return product
-      }
-    })
+    alert('該当する商品はありません');
+    setFilterText('');
   };
-  
-  console.log(showProducts)
-  console.log(filterText)
+
+  if (products !== undefined) {
+    showProducts = products.filter(
+      (product) => product.name.indexOf(filterText) !== -1
+    );
+  }
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
   const classes = useStyles();
-  
+
   return (
     <>
       <Search setText={setFilterText} />
       <div className={classes.flex}>
         {products === undefined
           ? ''
-          : showProducts.length !== 0 ? showProducts.map((product) => {
+          : showProducts.length !== 0
+          ? showProducts.map((product) => {
               return (
                 <Link
                   to={{ pathname: '/itemdetail', selectedItemId: product.id }}
@@ -92,9 +87,8 @@ const ItemList = () => {
                   </Card>
                 </Link>
               );
-          })
-            : alertDelete()
-        }
+            })
+          : alertDelete()}
       </div>
     </>
   );

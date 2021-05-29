@@ -1,4 +1,5 @@
 import React,{ useCallback, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -9,10 +10,22 @@ import { orderError } from '../reducks/validation/operation';
 import { useDispatch } from "react-redux";
 import { OrderError } from '../reducks/validation/operation';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom'
+import { getUserName } from '../reducks/users/selector';
 
 const OrderConfirm = () => {
 const dispatch = useDispatch();
 const history = useHistory();
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
+
+const classes = useStyles();
 
 const [destinationUserName, setDestinationUserName] = useState("")
 
@@ -22,9 +35,8 @@ const [destinationZipcode, setDestinationZipcode] = useState("")
 
 const [destinationAddress, setDestinationAddress] = useState("")
 
-const [destinationAddress2, setDestinationAddress2] = useState("")
-
 const [destinationTel, setDestinationTel] = useState("")
+
 const [destinationDate, setDestinationDate] = useState("")
 
 const inputOrderUserName = useCallback((e) => {
@@ -43,10 +55,6 @@ const inputOrderAddress = useCallback((e) => {
   setDestinationAddress(e.target.value)
 },[setDestinationAddress]);
 
-const inputOrderAddress2 = useCallback((e) => {
-  setDestinationAddress2(e.target.value)
-},[setDestinationAddress2]);
-
 const inputOrderTel = useCallback((e) => {
   setDestinationTel(e.target.value)
 },[setDestinationTel]);
@@ -56,13 +64,35 @@ const inputOrderDate = useCallback((e) => {
 },[setDestinationDate]);
 
 
-const orderClicked =(destinationUserName,destinationEmail) => {
-  dispatch(OrderError(destinationUserName,destinationEmail))
-  // history.push('/')
+const orderClicked =(
+  destinationUserName,
+  destinationEmail,
+  destinationZipcode,
+  destinationAddress,
+  destinationTel,
+  destinationDate
+  ) => {
+    dispatch(OrderError(
+      destinationUserName,
+      destinationEmail,
+      destinationZipcode,
+      destinationAddress,
+      destinationTel,
+      destinationDate))
+  
+  if(destinationUserName,
+    destinationEmail,
+    destinationZipcode,
+    destinationAddress,
+    destinationTel,
+    destinationDate){
+      console.log('入力完了してます')
+      history.push('/orderfinished')
+    }
 }
 
-
   return (
+    
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         お届け先情報入力
@@ -71,8 +101,8 @@ const orderClicked =(destinationUserName,destinationEmail) => {
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="orderName"
-            name="orderName"
+            id="username"
+            name="username"
             label="Name"
             fullWidth
             autoComplete="given-name"
@@ -88,38 +118,29 @@ const orderClicked =(destinationUserName,destinationEmail) => {
               label="Mail Address"
               fullWidth
               autoComplete="shipping mail"
+              onChange={inputOrderEmail}
             />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="zip"
-            name="zip"
-            label="Zip / Postal code"
+            id="zipcode"
+            name="zipcode"
+            label="Zipcode"
             fullWidth
             autoComplete="shipping postal-code"
+            onChange={inputOrderZipcode}
           />
         </Grid>
         <Grid item xs={12}>
             <TextField
             required
             id="address1"
-            name="address1"
+            name="address"
             label="Address line"
             fullWidth
             autoComplete="shipping address-line1"
             onChange={inputOrderAddress}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="address"
-            name="address"
-            label="Address"
-            fullWidth
-            autoComplete="shipping address-level2"
-            onChange={inputOrderAddress2}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -130,6 +151,7 @@ const orderClicked =(destinationUserName,destinationEmail) => {
             label="Phone Number"
             fullWidth
             autoComplete="shipping phone"
+            onChange={inputOrderTel}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -137,21 +159,28 @@ const orderClicked =(destinationUserName,destinationEmail) => {
           id="datetime-local"
           label="delivery day"
           type="datetime-local"
+          name="date"
           InputLabelProps={{
             shrink: true,
           }}
+          onChange={inputOrderDate}
           />
         </Grid>
         </Grid>
+        <div className={classes.root}>
         <Button
-            type="button"
-            variant="contained"
-            color="primary"
-            name="button"
-            onClick={() => orderClicked(destinationUserName,destinationEmail)}
-          >
+          type="button"
+          variant="contained"
+          color="primary"
+          name="button"
+          onClick={() => orderClicked(destinationUserName,destinationEmail,destinationZipcode,destinationAddress,destinationTel,destinationDate)}
+        >
             送信
-          </Button>
+        </Button>
+          <Link to="cartlist">
+            <Button variant="outlined">ショッピングカートに戻る</Button>
+          </Link>
+          </div>
     </React.Fragment>
   );
 };

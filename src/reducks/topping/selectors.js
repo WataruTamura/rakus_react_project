@@ -13,8 +13,7 @@ export const getSumPrice = createSelector(
   (state) => state.sum
 );
 
-// const sumPriceSelector = (state) => {
-//   console.log(state);
-//   return state.sumprice;
-// };
-// export const getSumPrice = createSelector([toppingSelector], (state) => state);
+export const getOrdersInfo = createSelector(
+  [toppingSelector],
+  (state) => state.ordersInfo
+);
