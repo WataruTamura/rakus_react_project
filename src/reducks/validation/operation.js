@@ -1,3 +1,4 @@
+import React from 'react';
 import { isValidRequiredInput } from "../../function/common";
 import { useDispatch } from "react-redux";
 
@@ -8,10 +9,9 @@ export const OrderError = (userName, email, zipcode, address, tel, date)=> {
     return async () => {
 
         // // Validations
-        // if(!isValidRequiredInput(userName,email, 
-        //     address,zipcode,tel,date)) {
+        // if(userName === '' || email === '' || address === '' || zipcode === '' || tel === '' || date === '') {
         //     alert('必須項目が未入力です。');
-        
+        //     return false
         // }
 
         if(userName === ''){
@@ -53,10 +53,13 @@ export const OrderError = (userName, email, zipcode, address, tel, date)=> {
         const year = today.getFullYear();
         const month = "0" + (1 + today.getMonth())
         const day = today.getDate();
+        const hour = today.getHours();
 
-        if(!date){
+        if(date === ''){
             console.log('配達')
             alert('配達日時を入力してください');
+        // } else if () {
+
         }
     }
 }

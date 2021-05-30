@@ -11,6 +11,7 @@ import {
 } from './templates';
 import { Header } from './components/index';
 import SignUp from './templates/SignUp';
+import PaymentForm from './reducks/payment/PaymentForm';
 
 const Router = () => {
   return (
@@ -25,6 +26,7 @@ const Router = () => {
         <Route exact path="/orderfinished" component={OrderFinished} />
         <Route exact path="/orderhistory" component={OrderHistory} />
         <Route exact path="/login" component={Login} />
+        <Route exact path="/paymentform" component={PaymentForm}/>
       </Switch>
     </BrowserRouter>
   );

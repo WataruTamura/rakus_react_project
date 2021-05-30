@@ -21,6 +21,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   fetchTopping,
   fetchSumPrice,
@@ -29,6 +30,7 @@ import {
 import { getProducts } from '../reducks/products/selectors';
 import { getTopping, getSumPrice } from '../reducks/topping/selectors';
 import { Topping } from '../components/index';
+import { getUserId } from '../reducks/users/selector';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,11 +70,16 @@ const useStyles = makeStyles((theme) => ({
 
 const ItemDetail = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const handleLink = (path) => {
+    history.push(path);
+  };
   const selector = useSelector((state) => state);
   const products = getProducts(selector);
   const topping = getTopping(selector);
   const sumPrice = getSumPrice(selector);
   const selectedId = useLocation().selectedItemId;
+  const uid = getUserId(selector);
   const selectedItem =
     products === undefined
       ? ''
@@ -701,9 +708,17 @@ const ItemDetail = () => {
               variant="contained"
               color="primary"
               onClick={() => {
-                dispatch(
-                  addOrdersInfo(selectedId, sumPrice, LabelName, toppings)
-                );
+                uid
+                  ? dispatch(
+                      addOrdersInfo(
+                        selectedId,
+                        sumPrice,
+                        LabelName,
+                        toppings,
+                        uid
+                      )
+                    )
+                  : handleLink('/');
               }}
             >
               カートに追加

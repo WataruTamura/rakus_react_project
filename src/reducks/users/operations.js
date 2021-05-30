@@ -14,7 +14,7 @@ import { createBrowserHistory } from "history";
 import { useDispatch } from "react-redux";
 
 const pattern = /^[0-9]{3}-[0-9]{4}$/;
-// const history = useHistory();
+
 // const handleLink = path => history.push(path);
 
 //const browserHistory = createBrowserHistory();
@@ -104,6 +104,11 @@ export const signUp = (
 export const SignIn = (email, password) => {
   return async (dispatch) => {
     console.log("ログイン");
+    if (email === '' || password === '') {
+      alert ('必須項目が未入力です。');
+      return false
+    }
+
     auth.signInWithEmailAndPassword(email, password).then((result) => {
       const user = result.user;
       console.log(user);
@@ -111,23 +116,23 @@ export const SignIn = (email, password) => {
         const uid = user.uid;
 
         db.collection(`users/${uid}/userinfo`)
-          .doc()
+          .doc(uid)
           .get()
           .then((snapshot) => {
             // console.log('１２３')
-            // const data = snapshot.data()
+            const data = snapshot.data()
             console.log(snapshot.data());
 
             dispatch(
               signInAction({
+                email: email,
                 isSignedIn: true,
                 uid: uid,
-                username: username,
+                // username: username,
               })
             );
-            //         console.log('ログイン済')
-            //         history.push('/');
-            //         console.log('済')
+              console.log('ログイン済')
+              // dispatch.push('/');
           });
       }
     });
@@ -137,15 +142,11 @@ export const SignIn = (email, password) => {
 export const signOut = () => {
   // return async (dispatch, getState) =>{
   console.log("ログアウト");
-  firebase.auth().signOut();
-  dispatch(
-    signOutAction({
-      isSignedIn: false,
-      uid: "",
-      username: "",
-    })
-  );
-  dispatch.push("/");
+  auth.signOut().then(() => {
+    dispatch(
+      signOutAction());
+      // dispatch.push("/login");
+  })
 };
 
 const ordersRef = db

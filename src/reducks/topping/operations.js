@@ -1,17 +1,17 @@
 import { db } from '../../firebase/index';
-import { push } from 'connected-react-router';
-import firebase from 'firebase/app';
+// import { push } from 'connected-react-router';
+// import firebase from 'firebase/app';
 import { fetchToppingAction, fetchSumPriceAction } from './actions';
 
-const productsRef = db.collection('topping').orderBy('id', 'asc');
+const toppingsRef = db.collection('topping').orderBy('id', 'asc');
 
 export const fetchTopping = () => {
   return async (dispatch) => {
-    productsRef.get().then((snapshots) => {
+    toppingsRef.get().then((snapshots) => {
       const toppingList = [];
       snapshots.forEach((snapshot) => {
-        const product = snapshot.data();
-        toppingList.push(product);
+        const topping = snapshot.data();
+        toppingList.push(topping);
       });
       dispatch(fetchToppingAction(toppingList));
     });
@@ -24,52 +24,67 @@ export const fetchSumPrice = (sumPrice) => {
   };
 };
 
-const ordersRef = db
-  .collection('users')
-  .doc('51Kio0Dzrkbf2J1txbDTdFL7XCh1')
-  .collection('orders');
+let localCart = [
+  {
+    itemInfo: [],
+    status: 0,
+  },
+];
 
-export const addOrdersInfo = (selectedId, sumPrice, LabelName, toppings) => {
+export const addOrdersInfo = (
+  selectedId,
+  sumPrice,
+  LabelName,
+  toppings,
+  uid
+) => {
+  console.log(uid);
+  // コレクションの取得
+  const ordersRef = db.collection('users').doc(uid).collection('orders');
+
+  // クリックしたらローカルのカートに情報を保存
+  localCart[0].itemInfo.push({
+    id: 'ffwafewawefew',
+    itemId: selectedId,
+    itemNum: sumPrice,
+    itemSize: LabelName,
+    toppings: toppings,
+  });
+
   return async (dispatch) => {
-    const data = {
-      itenInfo: [
-        {
-          id: 'fwefew',
+    ordersRef.get().then((querySnapshot) => {
+      // statusの状態とidの確認
+      let status = [];
+      let status0Id = '';
+      querySnapshot.forEach((doc) => {
+        if (doc.data().status === 0) {
+          status.push('0');
+          status0Id = doc.id;
+        }
+      });
+      if (status.length !== 0) {
+        // statusに0がある場合
+        return ordersRef.doc(status0Id).set(localCart[0]);
+      } else {
+        // statusに0がない場合、idを取得して保存
+        const ref = ordersRef.doc();
+        const id = ref.id;
+        localCart = [
+          {
+            orderId: id,
+            itemInfo: [],
+            status: 0,
+          },
+        ];
+        localCart[0].itemInfo.push({
+          // id: 'ffwafewawefew',
           itemId: selectedId,
           itemNum: sumPrice,
           itemSize: LabelName,
           toppings: toppings,
-        },
-      ],
-      status: 0,
-    };
-
-    const ref = ordersRef.doc();
-    const id = ref.id;
-    data.id = id;
-
-    // 注文確定されていなければに変更する
-    if (ordersRef.doc('qPJLa0j56aykBQbumOtX')) {
-      return ordersRef.doc('qPJLa0j56aykBQbumOtX').update({
-        itemInfo: firebase.firestore.FieldValue.arrayUnion(data.itenInfo[0]),
-      });
-    } else {
-      return ordersRef
-        .add(data)
-        .then(() => {
-          dispatch(push('/cartlist'));
-        })
-        .catch((error) => {
-          throw new Error(error);
         });
-    }
-
-    // dispatch(addOrdersInfoAction(selectedId, sumPrice, LabelName));
+        ordersRef.doc(id).set(localCart[0]);
+      }
+    });
   };
 };
-
-// export const size = (value) => {
-//   return () => {
-//     value;
-//   };
-// };

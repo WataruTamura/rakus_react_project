@@ -229,6 +229,7 @@ const Header = () => {
           </div>
         </Toolbar>
       </AppBar>
+      {username}
       <div className="log-button">
         <button
           onClick={() => {
@@ -238,7 +239,12 @@ const Header = () => {
           ログイン
         </button>
         &nbsp;&nbsp;&nbsp;
-        <button onClick={() => dispatch(signOut())}>ログアウト</button>
+        <button onClick={() => {
+          dispatch(signOut())
+          handleLink('/login')
+          }
+        }
+        >ログアウト</button>
       </div>
       {renderMobileMenu}
       {renderMenu}
