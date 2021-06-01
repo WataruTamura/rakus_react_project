@@ -9,7 +9,7 @@ import { UsersReducer } from '../users/reducers';
 import { ToppingReducer } from '../topping/reducers';
 
 import { routerMiddleware, connectRouter } from 'connected-react-router';
-import { createLogger } from 'redux-logger';
+// import { createLogger } from 'redux-logger';
 
 // const store = () => {
 //   return createStore(
@@ -26,13 +26,13 @@ import { createLogger } from 'redux-logger';
 export default function createStore(history) {
   // Define individual settings of redux-logger
   let middleWares = [routerMiddleware(history), thunk];
-  if (process.env.NODE_ENV === 'development') {
-    const logger = createLogger({
-      collapsed: true,
-      diff: true,
-    });
-    middleWares.push(logger);
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  //   const logger = createLogger({
+  //     collapsed: true,
+  //     diff: true,
+  //   });
+  //   middleWares.push(logger);
+  // }
 
   return reduxCreateStore(
     combineReducers({

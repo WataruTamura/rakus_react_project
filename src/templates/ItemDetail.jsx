@@ -214,34 +214,121 @@ const ItemDetail = () => {
     } else {
       setToppings(
         [
-          { id: topping[0].id, toppingSize: onion },
-          { id: topping[1].id, toppingSize: tsunamayo },
-          { id: topping[2].id, toppingSize: itarianTomato },
-          { id: topping[3].id, toppingSize: squid },
-          { id: topping[4].id, toppingSize: bulgogi },
-          { id: topping[5].id, toppingSize: anchovy },
-          { id: topping[6].id, toppingSize: shrimp },
-          { id: topping[7].id, toppingSize: corn },
-          { id: topping[8].id, toppingSize: peppers },
-          { id: topping[9].id, toppingSize: freshSliced },
-          { id: topping[10].id, toppingSize: bacon },
-          { id: topping[11].id, toppingSize: pepperoni },
-          { id: topping[12].id, toppingSize: aged },
-          { id: topping[13].id, toppingSize: special },
-          { id: topping[14].id, toppingSize: camembert },
-          { id: topping[15].id, toppingSize: freshMozzarella },
-          { id: topping[16].id, toppingSize: italianSausage },
-          { id: topping[17].id, toppingSize: garlic },
-          { id: topping[18].id, toppingSize: arabiki },
-          { id: topping[19].id, toppingSize: broccoli },
-          { id: topping[20].id, toppingSize: green },
-          { id: topping[21].id, toppingSize: parmesan },
-          { id: topping[22].id, toppingSize: pineapple },
-          { id: topping[23].id, toppingSize: jalapeno },
-          { id: topping[24].id, toppingSize: mochi },
-          { id: topping[25].id, toppingSize: potato },
-          { id: topping[26].id, toppingSize: black },
-          { id: topping[27].id, toppingSize: cheese },
+          {
+            toppingId: topping[0].id,
+            toppingSize: onion === 200 ? 0 : onion === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[1].id,
+            toppingSize: tsunamayo === 200 ? 0 : tsunamayo === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[2].id,
+            toppingSize:
+              itarianTomato === 200 ? 0 : itarianTomato === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[3].id,
+            toppingSize: squid === 200 ? 0 : squid === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[4].id,
+            toppingSize: bulgogi === 200 ? 0 : bulgogi === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[5].id,
+            toppingSize: anchovy === 200 ? 0 : anchovy === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[6].id,
+            toppingSize: shrimp === 200 ? 0 : shrimp === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[7].id,
+            toppingSize: corn === 200 ? 0 : corn === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[8].id,
+            toppingSize: peppers === 200 ? 0 : peppers === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[9].id,
+            toppingSize: freshSliced === 200 ? 0 : freshSliced === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[10].id,
+            toppingSize: bacon === 200 ? 0 : bacon === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[11].id,
+            toppingSize: pepperoni === 200 ? 0 : pepperoni === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[12].id,
+            toppingSize: aged === 200 ? 0 : aged === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[13].id,
+            toppingSize: special === 200 ? 0 : special === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[14].id,
+            toppingSize: camembert === 200 ? 0 : camembert === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[15].id,
+            toppingSize:
+              freshMozzarella === 200 ? 0 : freshMozzarella === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[16].id,
+            toppingSize:
+              italianSausage === 200 ? 0 : italianSausage === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[17].id,
+            toppingSize: garlic === 200 ? 0 : garlic === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[18].id,
+            toppingSize: arabiki === 200 ? 0 : arabiki === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[19].id,
+            toppingSize: broccoli === 200 ? 0 : broccoli === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[20].id,
+            toppingSize: green === 200 ? 0 : green === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[21].id,
+            toppingSize: parmesan === 200 ? 0 : parmesan === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[22].id,
+            toppingSize: pineapple === 200 ? 0 : pineapple === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[23].id,
+            toppingSize: jalapeno === 200 ? 0 : jalapeno === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[24].id,
+            toppingSize: mochi === 200 ? 0 : mochi === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[25].id,
+            toppingSize: potato === 200 ? 0 : potato === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[26].id,
+            toppingSize: black === 200 ? 0 : black === 300 ? 1 : '',
+          },
+          {
+            toppingId: topping[27].id,
+            toppingSize: cheese === 200 ? 0 : cheese === 300 ? 1 : '',
+          },
         ].filter((topping) => topping.toppingSize !== '')
       );
     }
@@ -710,15 +797,9 @@ const ItemDetail = () => {
               onClick={() => {
                 uid
                   ? dispatch(
-                      addOrdersInfo(
-                        selectedId,
-                        sumPrice,
-                        LabelName,
-                        toppings,
-                        uid
-                      )
+                      addOrdersInfo(selectedId, num, LabelName, toppings, uid)
                     )
-                  : handleLink('/');
+                  : handleLink('/login');
               }}
             >
               カートに追加
@@ -731,40 +812,3 @@ const ItemDetail = () => {
 };
 
 export default ItemDetail;
-
-// const orders = [
-//   {
-//     itemInfo: [
-//       {
-//         id: 'usergrewa239f0aw（いらない？）',
-//         itemId: 1,
-//         ItemNum: 4,
-//         itemSize: 0,
-//         toppings: [
-//           { id: 'fewag（いらない？）', toppingId: 1, toppingSize: 1 },
-//           { id: 'gawegfewa', toppingId: 2, toppingSize: 2 },
-//         ],
-//       },
-//       {
-//         id: 'fgwa09g490gaw（いらない？）',
-//         itemId: 2,
-//         ItemNum: 4,
-//         itemSize: 1,
-//         toppings: [
-//           { id: 'fewag（いらない？）', toppingId: 1, toppingSize: 1 },
-//           { id: 'gawegfewa', toppingId: 2, toppingSize: 2 },
-//         ],
-//       },
-//     ],
-//     status: 1,
-//     userId: 'ewgawghra0',
-//     orderDate: '2020-20-20',
-//     destinationName: '田中',
-//   },
-//   {
-//     status: 0,
-//     userId: 'ewgawghra0',
-//     orderDate: '2020-20-22',
-//     destinationName: '田村',
-//   },
-// ];

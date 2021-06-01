@@ -1,10 +1,9 @@
-import { unstable_renderSubtreeIntoContainer } from "react-dom";
+// import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 export const initialState = {
   users: {
     isSignedIn: false,
-
-    uid: '1CiNypKuOkdRJL7KKGaV5w7QSKB3',
+    uid: '',
     orders: [],
     username: '',
     email: '',
@@ -12,7 +11,7 @@ export const initialState = {
     address: '',
     tel: '',
     payment_method_id: '',
-    date: ''
+    date: '',
   },
   products: {},
   topping: {},

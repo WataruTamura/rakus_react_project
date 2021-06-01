@@ -1,31 +1,28 @@
-import React,{useEffect} from 'react';
+import React from 'react';
 import './assets/style.css';
 import Router from './Router';
-import { auth } from './firebase/index'
-import { useSelector } from 'react-redux';
-import { getUserId } from './reducks/users/selector';
+// import { auth } from './firebase/index';
+// import { useSelector } from 'react-redux';
+// import { getUserId } from './reducks/users/selector';
 //import {useHistory} from 'react-router-dom'
 
 const App = () => {
+  // const selector = useSelector((state) => state);
+  // let uid = getUserId(selector);
 
-
-
-  const selector = useSelector((state) => state);
-  let uid = getUserId(selector);
-
-  useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      if(user){
-        uid = user.uid;
-        console.log(user.uid)
-        console.log(uid);
-        console.log('ログインしました！')
-      }else{
-        uid = null
-        console.log('ログアウトしました！')
-      }
-    })
-  },[uid])
+  // useEffect(() => {
+  //   auth.onAuthStateChanged((user) => {
+  //     if (user) {
+  //       uid = user.uid;
+  //       // console.log(user.uid);
+  //       console.log(uid);
+  //       // console.log('ログインしました！');
+  //     } else {
+  //       uid = null;
+  //       // console.log('ログアウトしました！');
+  //     }
+  //   });
+  // }, [uid]);
 
   return (
     <div>

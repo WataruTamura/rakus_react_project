@@ -1,7 +1,12 @@
 import { db } from '../../firebase/index';
-// import { push } from 'connected-react-router';
-// import firebase from 'firebase/app';
 import { fetchToppingAction, fetchSumPriceAction } from './actions';
+
+let localCart = [
+  {
+    itemInfo: [],
+    status: 0,
+  },
+];
 
 const toppingsRef = db.collection('topping').orderBy('id', 'asc');
 
@@ -24,30 +29,18 @@ export const fetchSumPrice = (sumPrice) => {
   };
 };
 
-let localCart = [
-  {
-    itemInfo: [],
-    status: 0,
-  },
-];
-
-export const addOrdersInfo = (
-  selectedId,
-  sumPrice,
-  LabelName,
-  toppings,
-  uid
-) => {
-  console.log(uid);
+export const addOrdersInfo = (selectedId, num, LabelName, toppings, uid) => {
   // コレクションの取得
   const ordersRef = db.collection('users').doc(uid).collection('orders');
 
   // クリックしたらローカルのカートに情報を保存
+  const ref = ordersRef.doc();
+  const id = ref.id;
   localCart[0].itemInfo.push({
-    id: 'ffwafewawefew',
+    id: id,
     itemId: selectedId,
-    itemNum: sumPrice,
-    itemSize: LabelName,
+    itemNum: Number(num),
+    itemSize: Number(LabelName),
     toppings: toppings,
   });
 
@@ -77,14 +70,46 @@ export const addOrdersInfo = (
           },
         ];
         localCart[0].itemInfo.push({
-          // id: 'ffwafewawefew',
+          id: id,
           itemId: selectedId,
-          itemNum: sumPrice,
-          itemSize: LabelName,
+          itemNum: Number(num),
+          itemSize: Number(LabelName),
           toppings: toppings,
         });
         ordersRef.doc(id).set(localCart[0]);
       }
     });
   };
+};
+
+export const DeleteOrdersInfo = (uid, itemInfos, orderId) => {
+  const itemInfosId = itemInfos.id;
+  // コレクションの取得
+  const ordersRef = db.collection('users').doc(uid).collection('orders');
+
+  return async (dispatch) => {
+    ordersRef
+      .where('status', '==', 0)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const docId = doc.data().orderId;
+          let deleteItem = doc
+            .data()
+            .itemInfo.filter((item) => item.id !== itemInfosId);
+          localCart = [
+            {
+              orderId: orderId,
+              itemInfo: deleteItem,
+              status: 0,
+            },
+          ];
+          ordersRef.doc(orderId).set(localCart[0]);
+          if (doc.data().itemInfo.length === 1) {
+            ordersRef.doc(docId).delete();
+          }
+        });
+      });
+  };
+  // }, [,itemInfos.id, orderId, uid]);
 };
