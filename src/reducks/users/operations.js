@@ -290,6 +290,8 @@ export const addPaymentInfo = (
             totalPrice: sumPrice,
           });
         });
+        browserHistory.push('/ordercomplete');
+        location.reload();
       });
   };
 };
