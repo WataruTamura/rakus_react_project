@@ -187,11 +187,13 @@ const CartList = () => {
                                               <div>
                                                 {itemInfos.itemSize === 0 ? (
                                                   <div>
-                                                    {product.Mprice}円/個
+                                                    {product.Mprice.toLocaleString()}
+                                                    円/個
                                                   </div>
                                                 ) : (
                                                   <div>
-                                                    {product.Lprice}円/個
+                                                    {product.Lprice.toLocaleString()}
+                                                    円/個
                                                   </div>
                                                 )}
                                               </div>
@@ -244,9 +246,7 @@ const CartList = () => {
                                                                               toppings.name
                                                                             }
                                                                             /+1倍/+
-                                                                            {
-                                                                              toppings.Mprice
-                                                                            }
+                                                                            {toppings.Mprice.toLocaleString()}
                                                                             円
                                                                           </div>
                                                                         </>
@@ -257,9 +257,7 @@ const CartList = () => {
                                                                               toppings.name
                                                                             }
                                                                             /+2倍/+
-                                                                            {
-                                                                              toppings.Lprice
-                                                                            }
+                                                                            {toppings.Lprice.toLocaleString()}
                                                                             円
                                                                           </div>
                                                                         </>
@@ -280,16 +278,18 @@ const CartList = () => {
                                             >
                                               {itemInfos.itemSize === 0 ? (
                                                 <div>
-                                                  {(product.Mprice +
-                                                    toppingPrice) *
-                                                    itemInfos.itemNum}
+                                                  {(
+                                                    (product.Mprice +
+                                                      toppingPrice) *
+                                                    itemInfos.itemNum
+                                                  ).toLocaleString()}
                                                   円
                                                 </div>
                                               ) : (
                                                 <div>
-                                                  {(product.Lprice +
+                                                  {((product.Lprice +
                                                     toppingPrice) *
-                                                    itemInfos.itemNum}
+                                                    itemInfos.itemNum).toLocaleString()}
                                                   円
                                                 </div>
                                               )}
