@@ -191,30 +191,6 @@ export const setCancel = (orderId, uid) => {
   });
 };
 
-// 注文履歴を取得（使いたい時に）
-// export const fetchOrderHistory = (uid) => {
-//   console.log('hoge');
-//   const orderHistorylist = [];
-//   return async (dispatch) => {
-//     const ordersRef = db.collection('users').doc(uid).collection('orders');
-//     const getOrderHistory = ordersRef
-//       .where('status', '!=', 0)
-//       .get()
-//       .then((querySnapshot) => {
-//         querySnapshot.forEach((doc) => {
-//           console.log(doc.data());
-//           let hoge = {
-//             totalPrice: doc.data().totalPrice,
-//             itemInfo: doc.data().itemInfo,
-//           };
-//           orderHistorylist.push(hoge);
-//         });
-//         // console.log(orderHistorylist);
-//         console.log(orderHistorylist);
-//       });
-//   };
-// };
-
 export const addPaymentInfo = (
   uid,
   destinationUserName,
@@ -294,13 +270,12 @@ export const addPaymentInfo = (
     const ordersRef = db.collection('users').doc(uid).collection('orders');
     const timestamp = FirebaseTimestamp.now().toDate();
 
-    return ordersRef
+    ordersRef
       .where('status', '==', 0)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const orderedId = doc.data().orderId;
-
           ordersRef.doc(orderedId).update({
             status: paymentValue,
             userId: uid,
@@ -315,8 +290,6 @@ export const addPaymentInfo = (
             totalPrice: sumPrice,
           });
         });
-        browserHistory.push('/ordercomplete');
-        location.reload();
       });
   };
 };
@@ -357,17 +330,21 @@ export const listenAuthState = () => {
 };
 
 export const fetchCart = (uid) => {
-  const cartList = [];
-  const ordersRef = db.collection('users').doc(uid).collection('orders');
   return async (dispatch) => {
-    ordersRef
-      .where('status', '==', 0)
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          cartList.push(doc.data());
+    const cartList = [];
+
+    if (uid) {
+      const ordersRef = db.collection('users').doc(uid).collection('orders');
+
+      ordersRef
+        .where('status', '==', 0)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            cartList.push(doc.data());
+          });
+          dispatch(fetchCartAction(cartList));
         });
-        dispatch(fetchCartAction(cartList));
-      });
+    }
   };
 };

@@ -30,7 +30,7 @@ import {
 import { getProducts } from '../reducks/products/selectors';
 import { getTopping, getSumPrice } from '../reducks/topping/selectors';
 import { Topping } from '../components/index';
-import { getUserId } from '../reducks/users/selector';
+import { getUserId, getCart } from '../reducks/users/selector';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,6 +80,7 @@ const ItemDetail = () => {
   const sumPrice = getSumPrice(selector);
   const selectedId = useLocation().selectedItemId;
   const uid = getUserId(selector);
+  const carts = getCart(selector);
   const selectedItem =
     products === undefined
       ? ''
@@ -797,7 +798,14 @@ const ItemDetail = () => {
               onClick={() => {
                 uid
                   ? dispatch(
-                      addOrdersInfo(selectedId, num, LabelName, toppings, uid),
+                      addOrdersInfo(
+                        selectedId,
+                        num,
+                        LabelName,
+                        toppings,
+                        uid,
+                        carts
+                      ),
                       handleLink('/cartlist')
                     )
                   : handleLink('/login');

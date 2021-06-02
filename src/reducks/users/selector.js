@@ -23,6 +23,5 @@ export const getSignedIn = createSelector(
 );
 
 export const getCart = createSelector([usersSelector], (state) => {
-  console.log(state);
   return state.cartList;
 });
