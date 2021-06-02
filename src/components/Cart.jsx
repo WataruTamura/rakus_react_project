@@ -30,7 +30,7 @@ const useStyles = makeStyles({
 
 //export default function CartList()
 const Cart = () => {
-    const location = useLocation();
+  const location = useLocation();
   const history = useHistory();
   const selector = useSelector((state) => state);
   const selecter2 = useSelector((state) => state);
@@ -143,11 +143,8 @@ const Cart = () => {
   return (
     <div className="cartlist">
       {orders === undefined ? (
-      ''
-      ) :
-      orders.filter(el => el.status === 0).length === 0
-      
-       ? (
+        ''
+      ) : orders.filter((el) => el.status === 0).length === 0 ? (
         <div align="center">
           <h2>カートの中身は空です</h2>
           <Link to={{ pathname: '/' }}>
@@ -162,7 +159,6 @@ const Cart = () => {
         </div>
       ) : (
         <div>
-          
           <div>
             {orders === undefined ? (
               ''
@@ -190,7 +186,7 @@ const Cart = () => {
                     ? ''
                     : orders
                         .filter((order) => order.status === 0)
-                        .map((order,index) => {
+                        .map((order, index) => {
                           return (
                             <TableBody key={index}>
                               {order.itemInfo.map((itemInfos) => {
@@ -201,7 +197,7 @@ const Cart = () => {
                                         (product) =>
                                           product.id === itemInfos.itemId
                                       )
-                                      .map((product,index) => {
+                                      .map((product, index) => {
                                         return (
                                           <TableRow key={index}>
                                             <TableCell align="center">
@@ -225,11 +221,13 @@ const Cart = () => {
                                               <div>
                                                 {itemInfos.itemSize === 0 ? (
                                                   <div>
-                                                    {product.Mprice}円/個
+                                                    {product.Mprice.toLocaleString()}
+                                                    円/個
                                                   </div>
                                                 ) : (
                                                   <div>
-                                                    {product.Lprice}円/個
+                                                    {product.Lprice.toLocaleString()}
+                                                    円/個
                                                   </div>
                                                 )}
                                               </div>
@@ -251,59 +249,58 @@ const Cart = () => {
                                                                 toppings.id ===
                                                                 topp.toppingId
                                                             )
-                                                            .map((toppings,index) => {
-                                                              if (
-                                                                topp.toppingSize ===
-                                                                0
-                                                              ) {
-                                                                toppingPrice =
-                                                                  toppingPrice +
-                                                                  toppings.Mprice;
-                                                              } else {
-                                                                toppingPrice =
-                                                                  toppingPrice +
-                                                                  toppings.Lprice;
-                                                              }
-                                                              return (
-                                                                <div
-                                                                  key={
-                                                                    index
-                                                                  }
-                                                                >
-                                                                  <div></div>
-                                                                  <div>
-                                                                    {topp.toppingSize ===
-                                                                    0 ? (
-                                                                      <>
-                                                                        <div>
-                                                                          {
-                                                                            toppings.name
-                                                                          }
-                                                                          /+1倍/+
-                                                                          {
-                                                                            toppings.Mprice
-                                                                          }
-                                                                          円
-                                                                        </div>
-                                                                      </>
-                                                                    ) : (
-                                                                      <>
-                                                                        <div>
-                                                                          {
-                                                                            toppings.name
-                                                                          }
-                                                                          /+2倍/+
-                                                                          {
-                                                                            toppings.Lprice
-                                                                          }
-                                                                          円
-                                                                        </div>
-                                                                      </>
-                                                                    )}
+                                                            .map(
+                                                              (
+                                                                toppings,
+                                                                index
+                                                              ) => {
+                                                                if (
+                                                                  topp.toppingSize ===
+                                                                  0
+                                                                ) {
+                                                                  toppingPrice =
+                                                                    toppingPrice +
+                                                                    toppings.Mprice;
+                                                                } else {
+                                                                  toppingPrice =
+                                                                    toppingPrice +
+                                                                    toppings.Lprice;
+                                                                }
+                                                                return (
+                                                                  <div
+                                                                    key={index}
+                                                                  >
+                                                                    <div></div>
+                                                                    <div>
+                                                                      {topp.toppingSize ===
+                                                                      0 ? (
+                                                                        <>
+                                                                          <div>
+                                                                            {
+                                                                              toppings.name
+                                                                            }
+                                                                            /+1倍/+
+                                                                            {toppings.Mprice.toLocaleString()}
+                                                                            円
+                                                                          </div>
+                                                                        </>
+                                                                      ) : (
+                                                                        <>
+                                                                          <div>
+                                                                            {
+                                                                              toppings.name
+                                                                            }
+                                                                            /+2倍/+
+                                                                            {toppings.Lprice.toLocaleString()}
+                                                                            円
+                                                                          </div>
+                                                                        </>
+                                                                      )}
+                                                                    </div>
                                                                   </div>
-                                                                </div>
-                                                              );
-                                                            });
+                                                                );
+                                                              }
+                                                            );
                                                     }
                                                   )}
                                                 </div>
@@ -315,46 +312,53 @@ const Cart = () => {
                                             >
                                               {itemInfos.itemSize === 0 ? (
                                                 <div>
-                                                  {(product.Mprice +
-                                                    toppingPrice) *
-                                                    itemInfos.itemNum}
+                                                  {(
+                                                    (product.Mprice +
+                                                      toppingPrice) *
+                                                    itemInfos.itemNum
+                                                  ).toLocaleString()}
                                                   円
                                                 </div>
                                               ) : (
                                                 <div>
-                                                  {(product.Lprice +
-                                                    toppingPrice) *
-                                                    itemInfos.itemNum}
+                                                  {(
+                                                    (product.Lprice +
+                                                      toppingPrice) *
+                                                    itemInfos.itemNum
+                                                  ).toLocaleString()}
                                                   円
                                                 </div>
                                               )}
-                                              <div className="hide">{itemInfos.toppings.map(
-                                                (el) => (toppingPrice = 0)
-                                              )}</div>
+                                              <div className="hide">
+                                                {itemInfos.toppings.map(
+                                                  (el) => (toppingPrice = 0)
+                                                )}
+                                              </div>
                                             </TableCell>
-                                            
+
                                             <TableCell align="center">
                                               <div>
-                                                  {location.pathname === '/orderconfirm' ?
-                                                  <></> :
+                                                {location.pathname ===
+                                                '/orderconfirm' ? (
+                                                  <></>
+                                                ) : (
                                                   <Button
-                                                  key={order.id}
-                                                  variant="contained"
-                                                  color="primary"
-                                                  onClick={() => {
-                                                    dispatch(
-                                                      DeleteOrdersInfo(
-                                                        uid,
-                                                        itemInfos,
-                                                        order.orderId
-                                                      )
-                                                    );
-                                                  }}
-                                                >
-                                                  削除
-                                                </Button>
-                                                }
-                                                
+                                                    key={order.id}
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() => {
+                                                      dispatch(
+                                                        DeleteOrdersInfo(
+                                                          uid,
+                                                          itemInfos,
+                                                          order.orderId
+                                                        )
+                                                      );
+                                                    }}
+                                                  >
+                                                    削除
+                                                  </Button>
+                                                )}
                                               </div>
                                             </TableCell>
                                           </TableRow>
@@ -375,21 +379,21 @@ const Cart = () => {
             合計金額（税込）：{Math.round(total * 1.1).toLocaleString()}円
           </h2>
           <div className="center">
-          {location.pathname === '/cartlist' ? 
-            <Button
-            onClick={() =>
-              history.push('/orderconfirm', {
-                sumPrice: Math.round(total * 1.1),
-              })
-            }
-            variant="contained"
-            color="primary"
-          >
-            注文確認ボタンに進む
-          </Button> :
-           <> </>
-          }
-            
+            {location.pathname === '/cartlist' ? (
+              <Button
+                onClick={() =>
+                  history.push('/orderconfirm', {
+                    sumPrice: Math.round(total * 1.1),
+                  })
+                }
+                variant="contained"
+                color="primary"
+              >
+                注文確認ボタンに進む
+              </Button>
+            ) : (
+              <> </>
+            )}
           </div>
         </div>
       )}
