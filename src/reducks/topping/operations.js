@@ -3,13 +3,6 @@ import { fetchToppingAction, fetchSumPriceAction } from './actions';
 import { isValidRequiredInput } from '../../function/common';
 import firebase from 'firebase';
 
-let localCart = [
-  {
-    itemInfo: [],
-    status: 0,
-  },
-];
-
 const toppingsRef = db.collection('topping').orderBy('id', 'asc');
 
 export const fetchTopping = () => {
@@ -104,7 +97,7 @@ export const DeleteOrdersInfo = (uid, itemInfos, orderId) => {
           let deleteItem = doc
             .data()
             .itemInfo.filter((item) => item.id !== itemInfosId);
-          localCart = [
+          let localCart = [
             {
               orderId: orderId,
               itemInfo: deleteItem,

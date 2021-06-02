@@ -806,7 +806,7 @@ const ItemDetail = () => {
                         uid,
                         carts
                       ),
-                      handleLink('/cartlist')
+                      LabelName ? handleLink('/cartlist') : ''
                     )
                   : handleLink('/login');
               }}
