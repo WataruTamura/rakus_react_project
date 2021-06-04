@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../reducks/products/selectors';
+//import { FetchCart } from '../reducks/products/operations';
 import { getOrders } from '../reducks/users/selector';
 import { getTopping } from '../reducks/topping/selectors';
 import { fetchTopping } from '../reducks/topping/operations';
@@ -20,7 +21,6 @@ import { DeleteOrdersInfo } from '../reducks/topping/operations';
 import { getUserId } from '../reducks/users/selector';
 import { Link } from 'react-router-dom';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import { fetchCart } from '../reducks/users/operations';
 
 const useStyles = makeStyles({
   table: {
@@ -28,7 +28,8 @@ const useStyles = makeStyles({
   },
 });
 
-const CartList = () => {
+//export default function CartList()
+const Cart = () => {
   const location = useLocation();
   const history = useHistory();
   const selector = useSelector((state) => state);
@@ -36,9 +37,37 @@ const CartList = () => {
   const topping = getTopping(selecter2);
   const orders = getOrders(selector);
   const uid = getUserId(selector);
-  const dispatch = useDispatch();
-  const products = getProducts(selector);
+
   const [total, setTotalPrice] = useState(0);
+  // const [priceTopping, setPriceTopping] = useState(0);
+
+  // const createToppingPrice = () => {
+  //   let toppingPrice = 0;
+  //   const filterOrder = orders.filter((order) => order.status === 0);
+  //   filterOrder.forEach((item) => {
+  //     item.itemInfo.forEach((el) => {
+  //       el.toppings.forEach((el1) => {
+  //         if (topping) {
+  //           const selectTopping = topping.filter(
+  //             (top) => top.id === el1.toppingId
+  //           );
+  //           selectTopping.forEach((el5) => {
+  //             if (el1.toppingSize === 0) {
+  //               toppingPrice = toppingPrice + el5.Mprice;
+  //               toppingArray.push(toppingPrice);
+  //             } else {
+  //               toppingPrice = toppingPrice + el5.Lprice;
+  //               toppingArray.push(toppingPrice);
+  //             }
+  //           });
+  //         }
+  //       });
+  //     });
+  //   });
+  //   setPriceTopping(toppingPrice);
+
+  //   toppingArray.push(toppingPrice);
+  // };
 
   const createTotalPrice = () => {
     let totalPrice = 0;
@@ -76,13 +105,17 @@ const CartList = () => {
     setTotalPrice(totalPrice);
   };
 
+  // useEffect(() => {
+  //   createToppingPrice();
+  // },[]);
+
   useEffect(() => {
     createTotalPrice();
   });
 
-  useEffect(() => {
-    dispatch(fetchCart(uid));
-  }, [dispatch, uid]);
+  const dispatch = useDispatch();
+
+  const products = getProducts(selector);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -102,12 +135,13 @@ const CartList = () => {
   //------------------------------
 
   const classes = useStyles();
+  //console.log(orders);
 
   let toppingPrice = 0;
+  // const topPriceArray = []
 
   return (
     <div className="cartlist">
-      <h2 className="center">ショッピングカート</h2>
       {orders === undefined ? (
         ''
       ) : orders.filter((el) => el.status === 0).length === 0 ? (
@@ -236,7 +270,7 @@ const CartList = () => {
                                                                   <div
                                                                     key={index}
                                                                   >
-                                                                    {/* <div></div> */}
+                                                                    <div></div>
                                                                     <div>
                                                                       {topp.toppingSize ===
                                                                       0 ? (
@@ -287,9 +321,11 @@ const CartList = () => {
                                                 </div>
                                               ) : (
                                                 <div>
-                                                  {((product.Lprice +
-                                                    toppingPrice) *
-                                                    itemInfos.itemNum).toLocaleString()}
+                                                  {(
+                                                    (product.Lprice +
+                                                      toppingPrice) *
+                                                    itemInfos.itemNum
+                                                  ).toLocaleString()}
                                                   円
                                                 </div>
                                               )}
@@ -302,22 +338,27 @@ const CartList = () => {
 
                                             <TableCell align="center">
                                               <div>
-                                                <Button
-                                                  key={order.id}
-                                                  variant="contained"
-                                                  color="primary"
-                                                  onClick={() => {
-                                                    dispatch(
-                                                      DeleteOrdersInfo(
-                                                        uid,
-                                                        itemInfos,
-                                                        order.orderId
-                                                      )
-                                                    );
-                                                  }}
-                                                >
-                                                  削除
-                                                </Button>
+                                                {location.pathname ===
+                                                '/orderconfirm' ? (
+                                                  <></>
+                                                ) : (
+                                                  <Button
+                                                    key={order.id}
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() => {
+                                                      dispatch(
+                                                        DeleteOrdersInfo(
+                                                          uid,
+                                                          itemInfos,
+                                                          order.orderId
+                                                        )
+                                                      );
+                                                    }}
+                                                  >
+                                                    削除
+                                                  </Button>
+                                                )}
                                               </div>
                                             </TableCell>
                                           </TableRow>
@@ -348,7 +389,7 @@ const CartList = () => {
                 variant="contained"
                 color="primary"
               >
-                注文確認画面に進む
+                注文確認ボタンに進む
               </Button>
             ) : (
               <> </>
@@ -359,4 +400,4 @@ const CartList = () => {
     </div>
   );
 };
-export default CartList;
+export default Cart;

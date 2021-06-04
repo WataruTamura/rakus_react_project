@@ -1,96 +1,70 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-// import { makeStyles } from '@material-ui/core/styles';
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-// import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import CancelIcon from "@material-ui/icons/Cancel";
-import HistoryIcon from "@material-ui/icons/History";
-// import IconButton from "@material-ui/core/IconButton";
-import Card from "@material-ui/core/Card";
-// import CardContent from "@material-ui/core/CardContent";
-// import Link from "@material-ui/core/Link";
-import { fetchOrders } from "../reducks/users/operations";
-import { getOrders } from "../reducks/users/selector";
-import { fetchProducts } from "../reducks/products/operations";
-import { getProducts } from "../reducks/products/selectors";
-import { fetchTopping } from "../reducks/topping/operations";
-import { getTopping } from "../reducks/topping/selectors";
-import { Link } from "react-router-dom";
-import { setCancel } from "../reducks/users/operations";
-import Grid from "@material-ui/core/Grid";
-// import ImportContactsIcon from "@material-ui/icons/ImportContacts";
-import { getUserId } from "../reducks/users/selector";
-
-// const useStyles = makeStyles({
-//   table: {
-//     minWidth: 700,
-//   },
-// });
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import CancelIcon from '@material-ui/icons/Cancel';
+import HistoryIcon from '@material-ui/icons/History';
+import Card from '@material-ui/core/Card';
+import { fetchOrders } from '../reducks/users/operations';
+import { getOrders } from '../reducks/users/selector';
+import { getProducts } from '../reducks/products/selectors';
+import { getTopping } from '../reducks/topping/selectors';
+import { Link } from 'react-router-dom';
+import { setCancel } from '../reducks/users/operations';
+import Grid from '@material-ui/core/Grid';
+import { getUserId } from '../reducks/users/selector';
 
 const OrderHistory = () => {
-  const [double, setDouble] = useState(false);
-  // const [show, setShow] = useState(false);
-  // const [shows, setShows] = useState(true);
-  // const [cancel, setCancel] = useState('キャンセル');
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
-  const orders = getOrders(selector);
   const products = getProducts(selector);
-  // const topping = getTopping(selector);
+  const topping = getTopping(selector);
+  const orders = getOrders(selector);
   const uid = getUserId(selector);
-  const selecter2 = useSelector((state) => state);
-  const topping = getTopping(selecter2);
 
-  // useEffect(() => {
-  //   dispatch(fetchOrders());
-  // }, [dispatch]);
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
-  // useEffect(() => {
-  //   dispatch(fetchTopping());
-  // }, [dispatch]);
   useEffect(() => {
     if (uid) {
       dispatch(fetchOrders(uid));
     }
-  }, [dispatch, orders, uid]);
+  }, [dispatch, uid, orders]);
 
-  useEffect(() => {
-    dispatch(fetchTopping());
-  }, [dispatch]);
-  // useEffect(()=>{
-  //   const unsubscribe =db.collection("users").doc("1CiNypKuOkdRJL7KKGaV5w7QSKB3").collection("orders").onSnapshot(snapshots =>{
-
-  //   })
-  // })
+  const a = (time) => {
+    // console.log(time);
+    const b = new Date(time);
+    // const c = Date.now();
+    return (
+      b.getFullYear() +
+      '年' +
+      (b.getMonth() + 1) +
+      '月' +
+      b.getDate() +
+      '日' +
+      b.getHours() +
+      '時頃'
+    );
+  };
 
   return (
     <React.Fragment>
       {orders === undefined ? (
-        ""
+        ''
       ) : (
         <div align="center">
-          {orders.filter((el) => el.status !== 0).length === 0 ? (
+          {orders.filter((order) => order.status !== 0).length !== 0 ? (
             <Grid container alignItems="center" justify="center">
               <Grid item xs={8}>
                 <Card>
                   <h1 align="left">
                     &emsp;
                     <HistoryIcon style={{ fontSize: 30 }} color="primary" />
-                    &nbsp; 注文履歴&nbsp;
-                    {/* <ImportContactsIcon
-                      style={{ fontSize: 30 }}
-                      color="primary"
-                    /> */}
+                    &nbsp; 注文履歴
                   </h1>
                   <TableContainer>
                     <Table aria-label="spanning table">
@@ -100,12 +74,10 @@ const OrderHistory = () => {
                           <TableCell align="center">商品名</TableCell>
                           <TableCell align="center">トッピング</TableCell>
                           <TableCell align="center">数量</TableCell>
-                          {/* <TableCell align="center">合計金額</TableCell>
-                                  <TableCell align="center">お届け先</TableCell> */}
                         </TableRow>
                       </TableHead>
                       {orders === undefined
-                        ? ""
+                        ? ''
                         : orders
                             .filter((order) => order.status !== 0)
                             .map((order) => {
@@ -113,17 +85,16 @@ const OrderHistory = () => {
                                 <TableBody key={order.orderId}>
                                   <TableRow>
                                     <TableCell align="center">
-                                      <h3>{order.orderDate}に配達</h3>
+                                      <h3>
+                                        {a(order.orderDate.seconds * 1000)}
+                                        に注文済み
+                                      </h3>
                                     </TableCell>
-                                    {/* <TableCell align="center">
-                                    <h4>{}円</h4>
-                                  </TableCell>
-                                  <TableCell></TableCell> */}
                                     <TableCell colSpan="4"></TableCell>
                                   </TableRow>
                                   {order.itemInfo.map((itemInfos) => {
                                     return products === undefined
-                                      ? ""
+                                      ? ''
                                       : products
                                           .filter(
                                             (product) =>
@@ -143,7 +114,7 @@ const OrderHistory = () => {
                                                 <TableCell align="center">
                                                   <Link
                                                     to={{
-                                                      pathname: "/itemdetail",
+                                                      pathname: '/itemdetail',
                                                       selectedItemId:
                                                         product.id,
                                                     }}
@@ -153,31 +124,67 @@ const OrderHistory = () => {
                                                   </Link>
                                                 </TableCell>
                                                 <TableCell align="center">
-                                                  {itemInfos.toppings.map(
-                                                    (topp) => {
-                                                      return topping ===
-                                                        undefined
-                                                        ? ""
-                                                        : topping
-                                                            .filter(
-                                                              (toppings) =>
-                                                                toppings.id ===
-                                                                topp.toppingId
-                                                            )
-                                                            .map((toppings) => {
-                                                              return (
-                                                                <p
-                                                                  key={
-                                                                    toppings.id
+                                                  {itemInfos.toppings.length ===
+                                                  0 ? (
+                                                    <p>なし</p>
+                                                  ) : (
+                                                    <div>
+                                                      {itemInfos.toppings.map(
+                                                        (topp, index) => {
+                                                          return topping ===
+                                                            undefined
+                                                            ? ''
+                                                            : topping
+                                                                .filter(
+                                                                  (toppings) =>
+                                                                    toppings.id ===
+                                                                    topp.toppingId
+                                                                )
+                                                                .map(
+                                                                  (
+                                                                    toppings
+                                                                  ) => {
+                                                                    return (
+                                                                      <div
+                                                                        key={
+                                                                          index
+                                                                        }
+                                                                      >
+                                                                        {topp.toppingSize ===
+                                                                        0 ? (
+                                                                          <>
+                                                                            <div>
+                                                                              {
+                                                                                toppings.name
+                                                                              }
+                                                                              /+1倍/+
+                                                                              {
+                                                                                toppings.Mprice
+                                                                              }
+                                                                              円
+                                                                            </div>
+                                                                          </>
+                                                                        ) : (
+                                                                          <>
+                                                                            <div>
+                                                                              {
+                                                                                toppings.name
+                                                                              }
+                                                                              /+2倍/+
+                                                                              {
+                                                                                toppings.Lprice
+                                                                              }
+                                                                              円
+                                                                            </div>
+                                                                          </>
+                                                                        )}
+                                                                      </div>
+                                                                    );
                                                                   }
-                                                                >
-                                                                  {
-                                                                    toppings.name
-                                                                  }
-                                                                </p>
-                                                              );
-                                                            });
-                                                    }
+                                                                );
+                                                        }
+                                                      )}
+                                                    </div>
                                                   )}
                                                 </TableCell>
                                                 <TableCell
@@ -189,7 +196,7 @@ const OrderHistory = () => {
                                                 <TableCell align="center">
                                                   <Link
                                                     to={{
-                                                      pathname: "/itemdetail",
+                                                      pathname: '/itemdetail',
                                                       selectedItemId:
                                                         product.id,
                                                     }}
@@ -212,7 +219,7 @@ const OrderHistory = () => {
                                   })}
                                   <TableRow>
                                     <TableCell colSpan={4} align="right">
-                                      <h3>合計金額：{}円</h3>
+                                      <h3>合計金額：{order.totalPrice.toLocaleString()}円</h3>
                                     </TableCell>
                                     <TableCell align="center">
                                       {order.status !== 9 ? (
@@ -220,19 +227,14 @@ const OrderHistory = () => {
                                           <Button
                                             variant="contained"
                                             startIcon={<CancelIcon />}
-                                            disabled={
-                                              order.status === 9 || double
-                                            }
+                                            disabled={order.status === 9}
                                             onClick={() => {
-                                              // doSomething();
-                                              setDouble(true);
-                                              // setShow(true);
-                                              setCancel(order.orderId);
+                                              setCancel(order.orderId, uid);
                                             }}
                                           >
-                                            {order.status === 9 || double
-                                              ? "キャンセル済み"
-                                              : "キャンセル"}
+                                            {order.status === 9
+                                              ? 'キャンセル済み'
+                                              : 'キャンセル'}
                                           </Button>
                                         </div>
                                       ) : (
@@ -242,27 +244,13 @@ const OrderHistory = () => {
                                             startIcon={<CancelIcon />}
                                             disabled={order.status === 9}
                                             onClick={() => {
-                                              // doSomething();
-                                              // setDouble(true);
                                               setCancel(order.orderId);
                                             }}
                                           >
                                             {order.status === 9
-                                              ? "キャンセル済み"
-                                              : "キャンセル"}
+                                              ? 'キャンセル済み'
+                                              : 'キャンセル'}
                                           </Button>
-                                          {/* &emsp; &emsp; &emsp; &emsp; &emsp;
-                                          &emsp; &emsp;
-                                          <Button
-                                            showresults={shows}
-                                            onClick={() => {
-                                              resetCancel(order.orderId);
-                                              setDouble(false);
-                                              setShows(false);
-                                            }}
-                                          >
-                                            キャンセルを取り消し
-                                          </Button> */}
                                         </div>
                                       )}
                                     </TableCell>
@@ -278,7 +266,7 @@ const OrderHistory = () => {
           ) : (
             <div align="center">
               <h2>注文履歴がありません</h2>
-              <Link to={{ pathname: "/" }}>
+              <Link to={{ pathname: '/' }}>
                 <Button
                   variant="contained"
                   color="primary"

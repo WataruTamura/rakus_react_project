@@ -15,9 +15,9 @@ export const signInAction = (userState) => {
       uid: userState.uid,
       username: userState.username,
       zipcode: userState.zipcode,
-      tel:userState.tel,
+      tel: userState.tel,
       address: userState.address,
-      email:userState.email
+      email: userState.email,
     },
   };
 };
@@ -26,7 +26,7 @@ export const SIGN_OUT = 'SIGN_OUT';
 export const signOutAction = () => {
   return {
     type: 'SIGN_OUT',
-    payload: null
+    payload: null,
   };
 };
 
@@ -52,6 +52,15 @@ export const fetchOrdersAction = (orders) => {
   return {
     type: 'fetch_orders',
     payload: orders,
+  };
+};
+
+export const FETCH_CART = 'fetch_cart';
+export const fetchCartAction = (cartList) => {
+  
+  return {
+    type: FETCH_CART,
+    payload: cartList,
   };
 };
 

@@ -3,22 +3,20 @@ import { db, auth, FirebaseTimestamp } from '../../firebase/index';
 import {
   isValidEmailFormat,
   isValidRequiredInput,
+  isValidCardFormat,
 } from '../../function/common';
 import {
   signInAction,
   fetchOrdersAction,
   signUpAction,
   signOutAction,
+  fetchCartAction,
 } from './actions';
 import { createBrowserHistory } from 'history';
-//const usersRef = db.collection('users')
-import { useDispatch } from 'react-redux';
-//import { useHistory } from "react-router";
+import { push } from 'connected-react-router';
+import { useEffect } from 'react';
 
 const pattern = /^[0-9]{3}-[0-9]{4}$/;
-
-// const handleLink = path => history.push(path);
-//const browserHistory = createBrowserHistory();
 
 export const signUp = (
   username,
@@ -29,13 +27,13 @@ export const signUp = (
   password,
   confirmPassword
 ) => {
-  //const history = useHistory();
   const browserHistory = createBrowserHistory();
 
   return async (dispatch) => {
     // Validations
     if (
       !isValidRequiredInput(
+        username,
         email,
         password,
         confirmPassword,
@@ -61,12 +59,11 @@ export const signUp = (
       return false;
     }
     if (!pattern.test(zipcode)) {
-      console.log(zipcode);
       alert('郵便番号は XXX-XXXX の形式で入力してください');
       return false;
     }
-    if (tel.match(/\A0[5789]0[-(]?\d{4}[-)]?\d{4}\z/)) {
-      alert('電話番号は XXXX-XXXX-XXXX の形式で入力してください');
+    if (!tel.match(/^(0[5-9]0[0-9]{8}|0[1-9][1-9][0-9]{7})$/)) {
+      alert('携帯電話11桁の数値を入力してください！');
       return false;
     }
 
@@ -94,18 +91,16 @@ export const signUp = (
             .doc()
             .set(userInitialData)
             .then(async () => {
-              console.log(username);
-              console.log('DB保存成功');
-              browserHistory.push('/');
-              console.log('DB');
+              dispatch(push('/'));
+              location.reload();
             });
         }
         dispatch(signUpAction(username, email, zipcode, address, tel));
       });
   };
 };
-const usersRef = db.collection('users');
 
+const usersRef = db.collection('users');
 const signIn = (email, password) => {
   const browserHistory = createBrowserHistory();
   return async (dispatch) => {
@@ -117,6 +112,7 @@ const signIn = (email, password) => {
       alert('メールアドレスの形式が不正です。');
       return false;
     }
+
     return auth.signInWithEmailAndPassword(email, password).then((result) => {
       const userState = result.user;
       if (!userState) {
@@ -147,80 +143,32 @@ const signIn = (email, password) => {
                 zipcode: data.zipcode,
               })
             );
-            browserHistory.push('/');
           });
+          browserHistory.push('/');
+          location.reload();
         });
     });
   };
 };
 
 export default signIn;
-// const SignIn = (email, password) => {
-//   return async (dispatch) => {
-//     // console.log("ログイン");
-
-//     if (email === "" || password === "") {
-//       alert("必須項目が未入力です。");
-//       return false;
-//     }
-
-//     auth.signInWithEmailAndPassword(email, password).then((result) => {
-//       const user = result.user;
-//       console.log(user);
-//       if (user) {
-//         const uid = user.uid;
-
-//         db.collection(`users/${uid}/userinfo`)
-//           .doc(uid)
-//           .get()
-//           .then((snapshot) => {
-//             // console.log('１２３')
-//             const data = snapshot.data();
-//             console.log(data);
-
-//             dispatch(
-//               signInAction({
-//                 email: email,
-//                 isSignedIn: true,
-//                 uid: uid,
-//                 // username: username,
-//               })
-//             );
-//             console.log("ログイン済");
-//             // dispatch.push('/');
-//           });
-//       }
-//     });
-//   };
-// };
-// export default SignIn
-
-// export const signOut = () => {
-//   // return async (dispatch, getState) =>{
-//   console.log("ログアウト");
-//   auth.signOut().then(() => {
-//     dispatch(signOutAction());
-//     // dispatch.push("/login");
-//   });
-// };
 
 export const signOut = () => {
-  const browserHistory = createBrowserHistory();
   return async (dispatch) => {
     auth
       .signOut()
       .then(() => {
         dispatch(signOutAction());
-        browserHistory.push('/login');
       })
       .catch(() => {
         throw new Error('ログアウトに失敗しました。');
       });
+    dispatch(push('/login'));
+    location.reload();
   };
 };
 
 export const fetchOrders = (uid) => {
-  // const uid = getUserId(selector);
   const ordersRef = db.collection('users').doc(uid).collection('orders');
 
   return async (dispatch) => {
@@ -243,53 +191,91 @@ export const setCancel = (orderId, uid) => {
   });
 };
 
-// 注文履歴を取得（使いたい時に）
-// export const fetchOrderHistory = (uid) => {
-//   console.log('hoge');
-//   const orderHistorylist = [];
-//   return async (dispatch) => {
-//     const ordersRef = db.collection('users').doc(uid).collection('orders');
-//     const getOrderHistory = ordersRef
-//       .where('status', '!=', 0)
-//       .get()
-//       .then((querySnapshot) => {
-//         querySnapshot.forEach((doc) => {
-//           console.log(doc.data());
-//           let hoge = {
-//             totalPrice: doc.data().totalPrice,
-//             itemInfo: doc.data().itemInfo,
-//           };
-//           orderHistorylist.push(hoge);
-//         });
-//         // console.log(orderHistorylist);
-//         console.log(orderHistorylist);
-//       });
-//   };
-// };
-
 export const addPaymentInfo = (
   uid,
   destinationUserName,
+  destinationEmail,
   destinationZipcode,
   destinationAddress,
   destinationTel,
   destinationDate,
+  destinationPreTime,
   creditCardNo,
   sumPrice,
   paymentValue
 ) => {
-  const ordersRef = db.collection('users').doc(uid).collection('orders');
-  console.log(FirebaseTimestamp.now().toDate());
-  const timestamp = FirebaseTimestamp.now().toDate();
+  const browserHistory = createBrowserHistory();
+  const date1 = new Date();
+  const nowDate = date1.getDate();
+  const nowHour = date1.getHours();
+  const orderDate = Number(destinationDate.split('-').splice(2, 3).join(''));
 
   return async (dispatch) => {
+    // Validations
+    if (
+      !isValidRequiredInput(
+        destinationUserName,
+        destinationEmail,
+        destinationZipcode,
+        destinationAddress,
+        destinationTel,
+        destinationDate,
+        destinationPreTime,
+        paymentValue
+      )
+    ) {
+      alert('必須項目が未入力です。');
+      return false;
+    }
+
+    if (!pattern.test(destinationZipcode)) {
+      alert('郵便番号は XXX-XXXX の形式で入力してください');
+      return false;
+    }
+    if (!isValidEmailFormat(destinationEmail)) {
+      alert('メールアドレスの形式が不正です。もう1度お試しください。');
+      return false;
+    }
+    if (destinationTel.match(/^(0[5-9]0[0-9]{8}|0[1-9][1-9][0-9]{7})$/)) {
+      alert('電話番号は XXXX-XXXX-XXXX の形式で入力してください');
+      return false;
+    }
+    if (orderDate - nowDate < 0) {
+      alert('今日以降の日付を選択してください');
+      return false;
+    }
+    if (destinationPreTime === 0) {
+      alert('配達時間を選択してください');
+      return false;
+    }
+    if (orderDate - nowDate === 0 && destinationPreTime - nowHour <= 3) {
+      alert('3時間後以降の時間を選択してください');
+      return false;
+    }
+    if (paymentValue <= 0) {
+      alert('支払い方法を選択してください');
+      return false;
+    }
+
+    if (paymentValue === 2 && creditCardNo === 0) {
+      alert('クレジットカードの番号を記入してください');
+      return false;
+    }
+
+    if (paymentValue === 2 && !isValidCardFormat(creditCardNo)) {
+      alert('クレジットカードの形式が不正です。');
+      return false;
+    }
+
+    const ordersRef = db.collection('users').doc(uid).collection('orders');
+    const timestamp = FirebaseTimestamp.now().toDate();
+
     ordersRef
       .where('status', '==', 0)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const orderedId = doc.data().orderId;
-
           ordersRef.doc(orderedId).update({
             status: paymentValue,
             userId: uid,
@@ -304,6 +290,63 @@ export const addPaymentInfo = (
             totalPrice: sumPrice,
           });
         });
+        browserHistory.push('/ordercomplete');
+        location.reload();
       });
+  };
+};
+
+export const listenAuthState = () => {
+  return async (dispatch) => {
+    return auth.onAuthStateChanged((user) => {
+      if (user) {
+        usersRef
+          .doc(user.uid)
+          .collection('userinfo')
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+
+              if (!data) {
+                throw new Error('ユーザーデータが存在しません');
+              }
+              dispatch(
+                signInAction({
+                  email: data.email,
+                  isSignedIn: true,
+                  uid: user.uid,
+                  username: data.username,
+                  address: data.address,
+                  tel: data.tel,
+                  zipcode: data.zipcode,
+                })
+              );
+            });
+          });
+      } else {
+        dispatch(push('/login'));
+      }
+    });
+  };
+};
+
+export const fetchCart = (uid) => {
+  return async (dispatch) => {
+    const cartList = [];
+
+    if (uid) {
+      const ordersRef = db.collection('users').doc(uid).collection('orders');
+
+      ordersRef
+        .where('status', '==', 0)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            cartList.push(doc.data());
+          });
+          dispatch(fetchCartAction(cartList));
+        });
+    }
   };
 };

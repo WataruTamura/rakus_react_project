@@ -74,6 +74,8 @@ const Header = () => {
   const selector = useSelector((state) => state);
   const username = getUserName(selector);
   const uid = getUserId(selector);
+  // const cartlist = getCart(selector);
+
   // const uid = getUserId(selector);
 
   // useEffect(() => {
@@ -116,7 +118,7 @@ const Header = () => {
                   handleLink('/cartlist');
                 }}
               >
-                <Badge badgeContent={3} color="secondary">
+                <Badge color="secondary">
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>
@@ -131,7 +133,7 @@ const Header = () => {
                   handleLink('/orderhistory');
                 }}
               >
-                <Badge badgeContent={4} color="secondary">
+                <Badge color="secondary">
                   <ImportContactsIcon />
                 </Badge>
               </IconButton>

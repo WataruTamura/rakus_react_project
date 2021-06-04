@@ -9,7 +9,10 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../reducks/products/operations';
+import { fetchCart } from '../reducks/users/operations';
 import { getProducts } from '../reducks/products/selectors';
+import { getUserId } from '../reducks/users/selector';
+import { getOrders } from '../reducks/users/selector';
 
 const useStyles = makeStyles({
   root: {
@@ -28,6 +31,13 @@ const ItemList = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const products = getProducts(selector);
+  const uid = getUserId(selector);
+  const orders = getOrders(selector);
+
+  useEffect(() => {
+    dispatch(fetchCart(uid));
+  }, [dispatch, orders, uid]);
+
   let showProducts = [];
 
   const alertDelete = () => {
